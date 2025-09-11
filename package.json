@@ -9,7 +9,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "expo lint",
-    "auto-push": "git add . && git commit -m \"Auto commit\" && git push origin main"
+    "auto-push": "git add . && git commit -m \"Auto commit\" && git push origin master"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",
