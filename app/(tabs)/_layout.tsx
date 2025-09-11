@@ -20,24 +20,33 @@ export default function TabLayout() {
         tabBarBackground: TabBarBackground,
         tabBarStyle: Platform.select({
           ios: {
-            // Use a transparent background on iOS to show the blur effect
             position: 'absolute',
           },
           default: {},
         }),
-      }}>
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          tabBarIcon: ({ color }) => <IconSymbol name="house.fill" color={color} size={28} />,
         }}
       />
+
       <Tabs.Screen
-        name="explore"
+        name="ProductDetails"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'Chi tiết',
+          tabBarIcon: ({ color }) => <IconSymbol name="info.circle.fill" color={color} size={28} />,
+        }}
+      />
+
+      <Tabs.Screen
+        name="Cart"
+        options={{
+          title: 'Giỏ hàng',
+          tabBarIcon: ({ color }) => <IconSymbol name="cart.fill" color={color} size={28} />,
         }}
       />
     </Tabs>
