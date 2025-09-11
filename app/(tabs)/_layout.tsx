@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { Platform } from 'react-native';
@@ -33,22 +34,21 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <IconSymbol name="house.fill" color={color} size={28} />,
         }}
       />
-
       <Tabs.Screen
-        name="ProductDetails"
+        name="home"
         options={{
-          title: 'Chi tiết',
-          tabBarIcon: ({ color }) => <IconSymbol name="info.circle.fill" color={color} size={28} />,
+          title: 'Sản phẩm',
+          tabBarIcon: ({ color }) => <Ionicons name="bag" color={color} size={28} />,
         }}
       />
-
       <Tabs.Screen
         name="Cart"
         options={{
           title: 'Giỏ hàng',
-          tabBarIcon: ({ color }) => <IconSymbol name="cart.fill" color={color} size={28} />,
+          tabBarIcon: ({ color }) => <Ionicons name="cart" color={color} size={28} />,
         }}
       />
+
     </Tabs>
   );
 }

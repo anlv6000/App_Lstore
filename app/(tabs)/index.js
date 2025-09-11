@@ -1,20 +1,35 @@
-import React from 'react';
-import { StyleSheet } from 'react-native';
-import { Cart } from './Cart.js';
-import { ProductsList } from './ProductsList.js';
-import { CartProvider } from '../../context/CartContext.js';
+import { useState } from 'react';
+import { Button, StyleSheet, Text, View } from 'react-native';
+import HomeGoc from '../homegoc.js';
 
 export default function Main() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+
+  if (!isLoggedIn) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>Chào mừng đến với LTStore!</Text>
+        <Button title="Đăng nhập" onPress={handleLogin} />
+      </View>
+    );
+  }
+
   return (
-    <CartProvider>
-      <ProductsList />
-    </CartProvider>
+    <View style={{ flex: 1 }}>
+      <HomeGoc />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  headerTitle: {
-    fontSize: 20,
+  container: {
+    flex: 1, justifyContent: 'center', alignItems: 'center',
+  },
+  title: {
+    fontSize: 24, fontWeight: 'bold', marginBottom: 20,
   },
 });
-  

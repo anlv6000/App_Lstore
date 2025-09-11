@@ -5,8 +5,8 @@ import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { CartProvider } from '../context/CartContext'; // ✅ thêm dòng này
-
+import { AuthProvider } from '../context/AuthContext';
+import { CartProvider } from '../context/CartContext';
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
@@ -17,15 +17,19 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <CartProvider>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="ProductDetails" />
-          <Stack.Screen name="Cart" />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-      </CartProvider>
+      <AuthProvider> 
+        <CartProvider>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="ProductDetails" />
+            <Stack.Screen name="Cart" />
+            <Stack.Screen name="Login" /> 
+            <Stack.Screen name="+not-found" />
+          </Stack>
+        </CartProvider>
+      </AuthProvider>
       <StatusBar style="auto" />
     </ThemeProvider>
   );
 }
+

@@ -1,27 +1,28 @@
-import React, { useEffect, useState, useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import {
-  Text,
-  Image,
-  View,
-  ScrollView,
-  SafeAreaView,
   Button,
+  Image,
+  SafeAreaView,
+  ScrollView,
   StyleSheet,
+  Text,
+  View,
 } from 'react-native';
 
+import { useLocalSearchParams } from 'expo-router';
+import { Platform } from 'react-native';
+import { CartContext } from '../../context/CartContext.js';
 import { getProduct } from '../../services/ProductsService.js';
-import { CartContext } from '../../context/CartContext';
-import { useLocalSearchParams } from 'expo-router'; // ✅ dùng hook của Expo Router
 
 export default function ProductDetails() {
-  const { productId } = useLocalSearchParams(); // ✅ lấy params đúng cách
+  const { productId } = useLocalSearchParams();
   const [product, setProduct] = useState(null);
 
   const { addItemToCart } = useContext(CartContext);
 
   useEffect(() => {
     if (productId) {
-      setProduct(getProduct(Number(productId))); // đảm bảo là số
+      setProduct(getProduct(Number(productId)));
     }
   }, [productId]);
 
@@ -38,6 +39,12 @@ export default function ProductDetails() {
       </SafeAreaView>
     );
   }
+  const handleAddToCart = () => {
+    onAddToCart();
+    if (Platform.OS === 'android') {
+      ToastAndroid.show("Đã thêm vào giỏ hàng!", ToastAndroid.SHORT);
+    }
+  };
 
   return (
     <SafeAreaView>
@@ -49,7 +56,7 @@ export default function ProductDetails() {
           <Text style={styles.name}>{product.name}</Text>
           <Text style={styles.price}>$ {product.price}</Text>
           <Text style={styles.description}>{product.description}</Text>
-          <Button onPress={onAddToCart} title="Add to cart" />
+          <Button onPress={handleAddToCart} title="Add to cart" />
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -58,6 +65,7 @@ export default function ProductDetails() {
 
 const styles = StyleSheet.create({
   image: {
+    marginTop: 40,
     height: 300,
     width: '100%',
   },

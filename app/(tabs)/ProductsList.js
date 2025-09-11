@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 
+import { CartIcon } from '../../components/CartIcon';
 import { Product } from '../../components/Product';
 import { getProducts } from '../../services/ProductsService.js';
-import { CartIcon } from '../../components/CartIcon';
 
 export function ProductsList() {
   const navigation = useNavigation(); 
@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     backgroundColor: '#fff',
+    marginTop: 40,
   },
   headerTitle: {
     fontSize: 20,
