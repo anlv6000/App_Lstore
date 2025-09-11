@@ -10,9 +10,9 @@ import {
 } from 'react-native';
 
 import { useLocalSearchParams } from 'expo-router';
-import { Platform } from 'react-native';
-import { CartContext } from '../../context/CartContext.js';
-import { getProduct } from '../../services/ProductsService.js';
+import { Alert, Platform, ToastAndroid } from 'react-native';
+import { CartContext } from '../context/CartContext.js';
+import { getProduct } from '../services/ProductsService.js';
 
 export default function ProductDetails() {
   const { productId } = useLocalSearchParams();
@@ -41,14 +41,18 @@ export default function ProductDetails() {
   }
   const handleAddToCart = () => {
     onAddToCart();
-    if (Platform.OS === 'android') {
+
+    if (Platform.OS === 'android' && ToastAndroid) {
       ToastAndroid.show("Đã thêm vào giỏ hàng!", ToastAndroid.SHORT);
+    } else {
+      Alert.alert("Thông báo", "Đã thêm vào giỏ hàng!");
     }
   };
 
+
   return (
-    <SafeAreaView>
-      <ScrollView>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+      <ScrollView style={{ backgroundColor: '#fff' }}>
         {product.image && (
           <Image style={styles.image} source={product.image} />
         )}

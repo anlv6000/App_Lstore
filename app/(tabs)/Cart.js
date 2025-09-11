@@ -1,5 +1,5 @@
-import { useRouter } from 'expo-router'; // ✅ dùng Expo Router
-import React, { useContext } from 'react';
+import { useRouter } from 'expo-router';
+import { useContext } from 'react';
 import { Button, FlatList, StyleSheet, Text, View } from 'react-native';
 
 import { CartContext } from '../../context/CartContext';
@@ -30,7 +30,7 @@ export default function Cart() {
   }
 
   return (
-    <View style={{ padding: 40, flex: 1 }}>
+    <View style={{ padding: 40, flex: 1, backgroundColor: '#fff' }}>
       {items.length === 0 ? (
         <View style={{ padding: 16 }}>
           <Text style={{ fontSize: 18 }}>Giỏ hàng của bạn đang trống.</Text>

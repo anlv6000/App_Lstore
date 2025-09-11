@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { CartContext } from '../context/CartContext.js';
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   container: {
     marginHorizontal: 8,
     backgroundColor: 'orange',
-    height: 32,
+    height: 45,
     padding: 12,
     borderRadius: 32 / 2,
     alignItems: 'center',
