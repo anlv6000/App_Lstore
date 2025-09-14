@@ -87,13 +87,6 @@ export default function HomeGoc() {
           <Text>- Chính sách bảo hành</Text>
           <Text>- Chính sách bảo mật</Text>
         </View>
-        {/* 
-        <View style={styles.infoBlock}>
-          <Text style={styles.infoTitle}>Hướng dẫn</Text>
-          <Text>- Cách mua hàng</Text>
-          <Text>- Cách thanh toán</Text>
-          <Text>- Kiểm tra đơn hàng</Text>
-        </View> */}
 
         <View style={styles.infoBlock}>
           <Text style={styles.infoTitle}>Kết nối với chúng tôi</Text>
