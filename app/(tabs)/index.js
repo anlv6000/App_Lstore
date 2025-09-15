@@ -30,7 +30,7 @@ export default function Main() {
   if (!isLoggedIn) {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>Chào mừng đến với LTStore!!</Text>
+        <Text style={styles.title}>Chào mừng đến với LTStore!!!</Text>
         <Text style={styles.title}>Ấn đăng nhập để tiếp tục</Text>
         <Button title="Đăng nhập" onPress={handleLogin} />
       </View>
