@@ -12,7 +12,7 @@ if ($changes) {
     $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
     git commit -m "Auto commit: $timestamp"
     git push origin master
-    Write-Host "✅ Đã commit và push lúc $timestamp"
+    Write-Host "xong"
 } else {
-    Write-Host ⏸️ Không có thay đổi nào để commit."
+    Write-Host "khong thay doi"
 }
