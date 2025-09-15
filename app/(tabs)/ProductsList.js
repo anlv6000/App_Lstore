@@ -6,17 +6,13 @@ import { CartIcon } from '../../components/CartIcon';
 import { Product } from '../../components/Product';
 
 export function ProductsList() {
-  const navigation = useNavigation(); 
+  const navigation = useNavigation();
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
     async function fetchProducts() {
       try {
-        const response = await fetch('https://3542273ca3f9.ngrok-free.app/products', {
-          headers: {
-            'ngrok-skip-browser-warning': 'true',
-          },
-        });
+        const response = await fetch('http://103.249.117.201:12732/products');
 
         const contentType = response.headers.get('content-type');
         if (!contentType || !contentType.includes('application/json')) {
@@ -34,6 +30,7 @@ export function ProductsList() {
           scale: item.scale,
           brand: item.brand,
           stock: item.stock,
+          thumbnail: item.images?.[0],
         }));
 
         setProducts(formattedProducts);
@@ -46,6 +43,7 @@ export function ProductsList() {
     fetchProducts();
   }, []);
 
+
   function renderProduct({ item: product }) {
     return (
       <Product
@@ -56,6 +54,7 @@ export function ProductsList() {
           });
         }}
       />
+
     );
   }
 

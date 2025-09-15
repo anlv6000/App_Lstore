@@ -1,0 +1,269 @@
+[
+    {
+        "name": "Zeta Gundam",
+        "price": "1.200.000₫",
+        "type": "model",
+        "brand": "Bandai",
+        "stock": 12,
+        "images": [
+            "https://shokuningunpla.com/cdn/shop/products/Mgzetagundamverkaboxartcopy.png?v=1754508289&width=1100",
+            "https://shokuningunpla.com/cdn/shop/files/Image_20230609233212copy.png?v=1754508289&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/05detailSec02kvObj02copy.png?v=1754508289&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/01kvObj02copy.png?v=1754508290&width=1100"
+        ]
+    },
+    {
+        "name": "Unicorn Gundam",
+        "price": "1.500.000₫",
+        "type": "preorder",
+        "brand": "Bandai",
+        "stock": 8,
+        "releaseDate": "2023-11-24T00:00:00.000+08:00",
+        "images": [
+            "https://shokuningunpla.com/cdn/shop/products/156_738_s_8zicxt97wqsn6wzv2dzsa2moeslccopy.png?v=1754508977&width=1100",
+            "https://shokuningunpla.com/cdn/shop/files/MGUnicornOVAcopy.png?v=1754508977&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/61cY0O1nh6L._AC_SL1000__clipped_rev_1copy.png?v=1754508977&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/153_738_s_gnzju1684eyi0h6yc99cewhtnr6ecopy.jpg?v=1754508978&width=1100"
+        ]
+    },
+    {
+        "name": "RX-78-2 Gundam",
+        "price": "1.100.000₫",
+        "type": "model",
+        "brand": "Bandai",
+        "stock": 10,
+        "images": [
+            "https://shokuningunpla.com/cdn/shop/products/MG-RX-78-2-Gundam-Ver.3.0-box.png?v=1754510105&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/61wLdLGG_3L._AC_SL1500__clipped_rev_1.png?v=1754510105&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/MG-RX-78-2-Gundam-Ver.3.0-1_clipped_rev_1.png?v=1754510106&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/61sG1EE-7_L._AC_SL1500__clipped_rev_1.png?v=1754510105&width=1100"
+        ]
+    },
+    {
+        "name": "Gundam Barbatos",
+        "price": "1.300.000₫",
+        "type": "preorder",
+        "brand": "Bandai",
+        "stock": 5,
+        "releaseDate": "2023-12-10T00:00:00.000+08:00",
+        "images": [
+            "https://shokuningunpla.com/cdn/shop/products/191_3419_s_to0m866o5x5p8duhwc8b2f6wjvxz.png?v=1627429195&width=1100",
+            "https://shokuningunpla.com/cdn/shop/files/MGBarbatoscopy.png?v=1693427928&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/mg-gundam-barbatos-02.png?v=1693427928&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/153_3419_s_vz9j1dt7og26t5q5zd74bqkw4xvn.png?v=1693427928&width=1100"
+        ]
+    },
+    {
+        "name": "Strike Freedom Gundam",
+        "price": "1.400.000₫",
+        "type": "model",
+        "brand": "Bandai",
+        "stock": 7,
+        "images": [
+            "https://shokuningunpla.com/cdn/shop/products/313863514_5898581823538738_7425917603083802121_ncopy.png?v=1754508843&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/sec04obj03.2206copy.png?v=1754508844&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/sec00obj.2206copy.png?v=1754508845&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/sec01obj.220509copy.png?v=1754508845&width=1100"
+        ]
+    },
+    {
+        "name": "Gundam Exia",
+        "price": "1.250.000₫",
+        "type": "preorder",
+        "brand": "Bandai",
+        "stock": 6,
+        "releaseDate": "2023-12-01T00:00:00.000+08:00",
+        "images": [
+            "https://shokuningunpla.com/cdn/shop/products/mg_-_gn-001_-_gundam_exia_-_boxart-1copy.png?v=1754508980&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/155_1918_s_jmp3uwfjlfx6s8f0ayvars981ymj_clipped_rev_1copy.png?v=1754508980&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/156_1918_s_5a3l9e501n5j3e5baugj9x9k8fm0copy.jpg?v=1754508981&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/153_1918_s_qrk7d1h6s7dj3dvuzjd4yeb6eq0tcopy.jpg?v=1754508981&width=1100"
+        ]
+    },
+    {
+        "name": "Wing Gundam Zero",
+        "price": "1.350.000₫",
+        "type": "model",
+        "brand": "Bandai",
+        "stock": 11,
+        "images": [
+            "https://shokuningunpla.com/cdn/shop/products/157_1237_s_nu9v0d1bbm91lgzlm2du640uh8wfcopy.png?v=1754509298&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/155_1237_s_9kfohn0kc4492nq5bax90n6pb0br_clipped_rev_1copy.png?v=1754509298&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/153_1237_s_ey22kmlqwntvf9fbxab45ne9i1ftcopy.jpg?v=1754509298&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/156_1237_s_ynds3iaokawjhnpfpzsk9ucnjdd0copy.jpg?v=1754509298&width=1100"
+        ]
+    },
+    {
+        "name": "MG Sinanju",
+        "price": "1.600.000₫",
+        "type": "preorder",
+        "brand": "Bandai",
+        "stock": 4,
+        "releaseDate": "2023-12-20T00:00:00.000+08:00",
+        "images": [
+            "https://shokuningunpla.com/cdn/shop/products/81atOU36QDL._AC_SL1500.png?v=1754510483&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/61NSNuScEwL._AC_SL1082__clipped_rev_1.png?v=1754510483&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/714eovPuIvL._AC_SL1500__clipped_rev_1.png?v=1754510483&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/71Tm9eHR-SL._AC_SL1500__clipped_rev_1.png?v=1754510484&width=1100"
+        ]
+    },
+    {
+        "name": "Astray Red Frame",
+        "price": "1.300.000₫",
+        "type": "model",
+        "brand": "Bandai",
+        "stock": 10,
+        "images": [
+            "https://shokuningunpla.com/cdn/shop/products/MG_Gundam_Astray_Red_Frame_Kai_boxart.png?v=1754509707&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/mg-mbf-p02kai-gundam-astray-red-frame-kai-01_1_clipped_rev_1.png?v=1754509707&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/mg-mbf-p02kai-gundam-astray-red-frame-kai-01-03.jpg?v=1754509708&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/mg-mbf-p02kai-gundam-astray-red-frame-kai-02_1.jpg?v=1754509708&width=1100"
+        ]
+    },
+    {
+        "name": "RX-93 ν Gundam",
+        "price": "1.450.000₫",
+        "type": "preorder",
+        "brand": "Bandai",
+        "stock": 3,
+        "releaseDate": "2024-01-05T00:00:00.000+08:00",
+        "images": [
+            "https://shokuningunpla.com/cdn/shop/products/mg_nu_gundam_ver_ka_box_art.png?v=1754510132&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/71ttwD8IbNL._AC_SL1378__clipped_rev_1.png?v=1754510132&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/61lIxuqWNmL._AC_SL1500.jpg?v=1754510132&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/MG_RX-93_Nu_Gundam_Ver.Ka_3_1024x1024_0e7f7ab0-4198-4a13-890a-769115f989d6.jpg?v=1754510133&width=1100"
+        ]
+    },
+    {
+        "name": "Gundam F91",
+        "price": "1.200.000₫",
+        "type": "model",
+        "brand": "Bandai",
+        "stock": 9,
+        "images": [
+            "https://shokuningunpla.com/cdn/shop/products/MG-Gundam-F91-Ver-2.0-box.png?v=1754510111&width=1100",
+            "https://shokuningunpla.com/cdn/shop/files/MGF91copy.png?v=1754510111&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/71naPdmu2aL._AC_SL1437__clipped_rev_1.png?v=1754510111&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/710kCwe0gtL._AC_SL1500.jpg?v=1754510111&width=1100"
+        ]
+    },
+    {
+        "name": "Gundam AGE-FX",
+        "price": "1.250.000₫",
+        "type": "available",
+        "brand": "Bandai",
+        "stock": 14,
+        "images": [
+            "https://shokuningunpla.com/cdn/shop/products/HGAGE-Gundam-AGE-FX-boxcopy.png?v=1743177545&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/61BVbO7VA9L._AC_SL1000_copy.png?v=1743177545&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/71e4sD3k5NL._AC_SL1500_copy.jpg?v=1743177545&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/61jF-7QRAVL._AC_SL1170__clipped_rev_1copy.png?v=1743177545&width=1100"
+        ]
+    },
+    {
+        "name": "Gundam 00 Raiser",
+        "price": "1.300.000₫",
+        "type": "model",
+        "brand": "Bandai",
+        "stock": 6,
+        "images": [
+            "https://shokuningunpla.com/cdn/shop/products/MG_1-100_00_Raiser_-_Boxart.png?v=1754509840&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/716E3EZa2_L._AC_SL1423__clipped_rev_1.png?v=1754509841&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/71jUvlJ-XVL._AC_SL1500.jpg?v=1754509841&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/61OSuwTr_fL._AC_SL1500.jpg?v=1754509841&width=1100"
+        ]
+    },
+    {
+        "name": "Gundam Kimaris",
+        "price": "1.150.000₫",
+        "type": "preorder",
+        "brand": "Bandai",
+        "stock": 5,
+        "releaseDate": "2023-12-28T00:00:00.000+08:00",
+        "images": [
+            "https://shokuningunpla.com/cdn/shop/files/HGGundamKimaris_1_copy.png?v=1754506225&width=1100",
+            "https://shokuningunpla.com/cdn/shop/files/HGGundamKimaris_2_copy.png?v=1754506225&width=1100",
+            "https://shokuningunpla.com/cdn/shop/files/2_229afdf1-c54a-4cc6-9173-9885276b7351.png?v=1754506225&width=1100",
+            "https://shokuningunpla.com/cdn/shop/files/3_ad65e8a6-9064-4151-9782-b355c1776329.png?v=1754506225&width=1100"
+        ]
+    },
+    {
+        "name": "Gundam Double X",
+        "price": "1.100.000₫",
+        "type": "model",
+        "brand": "Bandai",
+        "stock": 8,
+        "images": [
+            "https://shokuningunpla.com/cdn/shop/products/ban994873_0.png?v=1754510270&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/ban994873_2_clipped_rev_1.png?v=1754510270&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/ban994873_1_43351c17-8c13-405a-adbc-014dc869c1ce.jpg?v=1754510270&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/ban994873_4_7173bd27-0767-48ec-979e-767599290706.jpg?v=1754510271&width=1100"
+        ]
+    },
+    {
+        "name": "Gundam Epyon",
+        "price": "1.350.000₫",
+        "type": "available",
+        "brand": "Bandai",
+        "stock": 7,
+        "images": [
+            "https://shokuningunpla.com/cdn/shop/products/157_2719_s_dmfy5s34hi1g4ffgbgte5l4zx4iy.png?v=1754510023&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/3324_clipped_rev_1.png?v=1754510023&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/153_2719_s_n2ncumrxa6xl6xsz2tfpxk97ke1h.jpg?v=1754510023&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/71Esi0dDoTL._AA1500.jpg?v=1754510023&width=1100"
+        ]
+    },
+    {
+        "name": "Gundam Deathscythe Hell",
+        "price": "1.400.000₫",
+        "type": "model",
+        "brand": "Bandai",
+        "stock": 6,
+        "images": [
+            "https://shokuningunpla.com/cdn/shop/products/190_2715_s_8hj8jalilnlqqqcz3gj2pul1vjl6.png?v=1754509399&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/155_2715_s_4mr6jqsmfrlw0lppnzl2028wrckx_clipped_rev_1.png?v=1754509399&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/153_2715_s_1r307oiwpzi1otwkozs9srd8gatb.jpg?v=1754509399&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/159_2715_s_yj07c5atnjah33crrcus4cpzi0zz.jpg?v=1754509399&width=1100"
+        ]
+    },
+    {
+        "name": "Gundam Sandrock",
+        "price": "1.250.000₫",
+        "type": "available",
+        "brand": "Bandai",
+        "stock": 10,
+        "images": [
+            "https://shokuningunpla.com/cdn/shop/products/157_2725_s_hiedwr4vor3h0niynz6otkb2vsfh.png?v=1754509396&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/155_2725_s_392s3azl95q0cag72f59sxhllq9s_clipped_rev_1.png?v=1754509396&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/153_2725_s_4k9l4h3ktz7orxpgsz5idtpw2iju.jpg?v=1754509396&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/156_2725_s_imisvoduo1akt8sdvnm4n2xf1qsv.jpg?v=1754509396&width=1100"
+        ]
+    },
+    {
+        "name": "Gundam Heavyarms",
+        "price": "1.300.000₫",
+        "type": "model",
+        "brand": "Bandai",
+        "stock": 9,
+        "images": [
+            "https://shokuningunpla.com/cdn/shop/products/811I-TYWJKL._AC_SL1500.png?v=1755127756&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/61pf-YYWWkL._AC_SL1323.png?v=1755127756&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/61qm8-LTOfL._AC_SL1500.png?v=1755127756&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/61qm8-LTOfL._AC_SL1500.png?v=1755127756&width=1100"
+        ]
+    },
+    {
+        "name": "Gundam Tallgeese III",
+        "price": "1.500.000₫",
+        "type": "preorder",
+        "brand": "Bandai",
+        "stock": 4,
+        "releaseDate": "2024-01-15T00:00:00.000+08:00",
+        "images": [
+            "https://shokuningunpla.com/cdn/shop/files/2_clipped_rev_1copy.png?v=1724476891&width=1100",
+            "https://shokuningunpla.com/cdn/shop/files/MGTallgeese3copy.png?v=1724476895&width=1100",
+            "https://shokuningunpla.com/cdn/shop/files/N2277365001007_004_clipped_rev_1copy.png?v=1724476891&width=1100",
+            "https://shokuningunpla.com/cdn/shop/products/N2277365001001_005copy.png?v=1724476895&width=1100"
+        ]
+    }
+]

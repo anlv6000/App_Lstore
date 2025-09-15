@@ -1,3 +1,7 @@
+import { useNavigation } from '@react-navigation/native';
+import { useEffect, useState } from 'react';
+import { TouchableOpacity } from 'react-native';
+
 import {
   FlatList,
   Image,
@@ -6,14 +10,40 @@ import {
   Text,
   TextInput,
   View
-} from 'react-native';
-
-const bestSellers = [
-  { id: '1', name: 'Tai nghe ReactProX', price: '350.000₫', image: require('../assets/products/33tos1.png') },
-  { id: '2', name: 'Xe đồ chơi FastLane', price: '600.000₫', image: require('../assets/products/33tos2.png') },
-];
+} from 'react-native'; // nếu chưa có
 
 export default function HomeGoc() {
+  const [preOrderProducts, setPreOrderProducts] = useState([]);
+  const [availableProducts, setAvailableProducts] = useState([]);
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    fetch('http://103.249.117.201:12732/products')
+      .then((res) => res.json())
+      .then((data) => {
+        const preOrder = data.filter((item) => item.type === 'preorder');
+        const available = data.filter((item) => item.type === 'available');
+        setPreOrderProducts(preOrder);
+        setAvailableProducts(available);
+      })
+      .catch((err) => console.error('Fetch error:', err));
+  }, []);
+
+  
+
+  const renderProduct = ({ item }) => (
+    <TouchableOpacity
+      onPress={() => navigation.navigate('ProductDetails', { productId: item._id })}
+    >
+      <View style={styles.productCard}>
+        <Image source={{ uri: item.images?.[0] }} style={styles.productImage} />
+        <Text style={styles.productName}>{item.name || item.title}</Text>
+        <Text style={styles.productPrice}>{item.price}₫</Text>
+      </View>
+    </TouchableOpacity>
+  );
+
+
   return (
     <ScrollView style={styles.container}>
       <Image source={require('../assets/logo.png')} style={styles.logo} />
@@ -23,7 +53,6 @@ export default function HomeGoc() {
         placeholder="Tìm kiếm sản phẩm..."
         placeholderTextColor="#999"
       />
-
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.carousel}>
         <Image source={require('../assets/products/33tos1.png')} style={styles.carouselImage} />
         <Image source={require('../assets/products/33tos2.png')} style={styles.carouselImage} />
@@ -41,35 +70,26 @@ export default function HomeGoc() {
         <Image source={require('../assets/danhmuc_7.webp')} style={styles.carouselImage2} />
       </ScrollView>
 
-      <Text style={styles.sectionTitle}>Sản phẩm đặt trước mới nhất</Text>
+      {/* Sản phẩm đặt trước */}
+      <Text style={styles.sectionTitle}>Sản phẩm Đặt Trước</Text>
       <FlatList
         horizontal
-        data={bestSellers}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View style={styles.productCard}>
-            <Image source={item.image} style={styles.productImage} />
-            <Text style={styles.productName}>{item.name}</Text>
-            <Text style={styles.productPrice}>{item.price}</Text>
-          </View>
-        )}
+        data={preOrderProducts}
+        keyExtractor={(item) => item._id}
+        renderItem={renderProduct}
         showsHorizontalScrollIndicator={false}
       />
 
-      <Text style={styles.sectionTitle}>Sản phẩm có sẵn</Text>
+      {/* Sản phẩm có sẵn */}
+      <Text style={styles.sectionTitle}>Sản phẩm Có Sẵn</Text>
       <FlatList
         horizontal
-        data={bestSellers}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View style={styles.productCard}>
-            <Image source={item.image} style={styles.productImage} />
-            <Text style={styles.productName}>{item.name}</Text>
-            <Text style={styles.productPrice}>{item.price}</Text>
-          </View>
-        )}
+        data={availableProducts}
+        keyExtractor={(item) => item._id}
+        renderItem={renderProduct}
         showsHorizontalScrollIndicator={false}
       />
+
 
       <View style={styles.infoSection}>
         <Text style={styles.sectionTitle}>Thông tin cửa hàng</Text>
@@ -82,13 +102,6 @@ export default function HomeGoc() {
         </View>
 
         <View style={styles.infoBlock}>
-          <Text style={styles.infoTitle}>Chính sách</Text>
-          <Text>- Chính sách đổi trả</Text>
-          <Text>- Chính sách bảo hành</Text>
-          <Text>- Chính sách bảo mật</Text>
-        </View>
-
-        <View style={styles.infoBlock}>
           <Text style={styles.infoTitle}>Kết nối với chúng tôi</Text>
           <Text>- YouTube | Facebook | Instagram | TikTok</Text>
           <Text>- Thanh toán: MoMo, chuyển khoản</Text>
@@ -97,7 +110,6 @@ export default function HomeGoc() {
     </ScrollView>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -120,10 +132,64 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     backgroundColor: '#f2f2f2',
   },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginVertical: 12,
+    color: '#333',
+  },
+  productCard: {
+    width: 180,
+    marginRight: 12,
+    backgroundColor: '#fafafa',
+    borderRadius: 10,
+    padding: 8,
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  productImage: {
+    width: 120,
+    height: 100,
+    borderRadius: 8,
+    marginRight: 8,
+  },
+  productName: {
+    marginTop: 6,
+    fontSize: 14,
+    fontWeight: '600',
+    textAlign: 'center',
+    color: '#222',
+  },
+  productPrice: {
+    fontSize: 13,
+    color: '#e53935',
+    marginTop: 4,
+    textAlign: 'center',
+  },
+  infoSection: {
+    paddingVertical: 20,
+    borderTopWidth: 1,
+    borderColor: '#eee',
+    marginTop: 20,
+  },
+  infoBlock: {
+    marginBottom: 16,
+  },
+  infoTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 6,
+    color: '#333',
+  },
+
+
   carousel: {
     marginBottom: 20,
   },
-   carousel2: {
+  carousel2: {
     marginBottom: 20,
     marginStart: 5,
   },
@@ -141,72 +207,5 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
 
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginVertical: 12,
-    color: '#333',
-  },
-  productCard: {
-    width: 160,
-    marginRight: 12,
-    alignItems: 'center',
-    backgroundColor: '#fafafa',
-    borderRadius: 10,
-    padding: 8,
-  },
-  productImage: {
-    width: 120,
-    height: 100,
-    borderRadius: 8,
-  },
-  productName: {
-    marginTop: 6,
-    fontSize: 14,
-    fontWeight: '600',
-    textAlign: 'center',
-    color: '#222',
-  },
-  productPrice: {
-    fontSize: 13,
-    color: '#e53935',
-    marginTop: 4,
-  },
-  placeholder: {
-    height: 80,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f9f9f9',
-    borderRadius: 8,
-    marginBottom: 20,
-  },
-  footer: {
-    paddingVertical: 20,
-    borderTopWidth: 1,
-    borderColor: '#ddd',
-  },
-  footerTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 6,
-    color: '#444',
-  },
-  footerLink: {
-    marginTop: 6,
-    color: '#1e88e5',
-  },
-  infoSection: {
-    paddingVertical: 20,
-    borderTopWidth: 1,
-    borderColor: '#eee',
-  },
-  infoBlock: {
-    marginBottom: 16,
-  },
-  infoTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 6,
-    color: '#333',
-  },
+
 });

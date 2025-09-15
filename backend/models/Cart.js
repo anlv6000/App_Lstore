@@ -1,14 +1,35 @@
 const mongoose = require('mongoose');
 
 const cartSchema = new mongoose.Schema({
-  userId: mongoose.Schema.Types.ObjectId,
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
   items: [
     {
-      productId: mongoose.Schema.Types.ObjectId,
-      quantity: Number
+      productId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product',
+        required: true
+      },
+      quantity: {
+        type: Number,
+        default: 1,
+        min: 1
+      }
     }
   ],
-  updatedAt: { type: Date, default: Date.now }
+  updatedAt: {
+    type: Date,
+    default: Date.now
+  }
+});
+
+// ✅ Tự động cập nhật updatedAt mỗi lần thay đổi
+cartSchema.pre('save', function (next) {
+  this.updatedAt = Date.now();
+  next();
 });
 
 module.exports = mongoose.model('Cart', cartSchema);
