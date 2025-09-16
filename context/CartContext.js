@@ -7,7 +7,7 @@ export function CartProvider(props) {
   const [items, setItems] = useState([]);
 
   async function addItemToCart(id) {
-    const product = await getProduct(id); // ✅ dùng await để lấy dữ liệu
+    const product = await getProduct(id);
 
     if (!product || typeof product !== 'object' || product.price == null) {
       console.error('❌ Dữ liệu sản phẩm không hợp lệ:', product);

@@ -14,7 +14,7 @@ export function CartIcon() {
         style={styles.text}
         onPress={() => router.push('/(tabs)/Cart')}
       >
-        Cart ({getItemsCount()})
+        --Cart--
       </Text>
     </View>
   );
