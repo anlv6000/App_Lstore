@@ -1,18 +1,22 @@
 import React, { createContext, useState } from 'react';
-import { getProduct } from '../services/ProductsService.js';
 
 export const CartContext = createContext();
 
 export function CartProvider(props) {
   const [items, setItems] = useState([]);
 
-  async function addItemToCart(id) {
-    const product = await getProduct(id);
-
-    if (!product || typeof product !== 'object' || product.price == null) {
+  function addItemToCart(product) {
+    if (
+      !product ||
+      typeof product !== 'object' ||
+      product.price == null ||
+      !product._id
+    ) {
       console.error('❌ Dữ liệu sản phẩm không hợp lệ:', product);
       return;
     }
+
+    const id = product._id.toString(); // đảm bảo id là chuỗi
 
     setItems((prevItems) => {
       const existingItem = prevItems.find((item) => item.id === id);
@@ -42,7 +46,6 @@ export function CartProvider(props) {
       });
     });
   }
-
 
   function getItemsCount() {
     return items.reduce((sum, item) => sum + item.qty, 0);

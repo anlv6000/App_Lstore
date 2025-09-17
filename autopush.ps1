@@ -10,7 +10,7 @@ $changes = git status --porcelain
 if ($changes) {
     git add .
     $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-    git commit -m "Auto commit: $timestamp"
+    git commit -m "Auto commit-by LeVanAn: $timestamp"
     git push origin master
     Write-Host "xong"
 } else {

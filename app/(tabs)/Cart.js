@@ -19,18 +19,20 @@ export default function Cart() {
   }
 
   function renderItem({ item }) {
+    const name = item?.product?.name || 'Sản phẩm';
     return (
       <View style={styles.cartLine}>
         <Text style={styles.lineLeft}>
-          {item.product.name} x {item.qty}
+          {name} x {item.qty}
         </Text>
         <Text style={styles.lineRight}>$ {item.totalPrice}</Text>
       </View>
     );
   }
 
+
   return (
-    <View style={{ padding: 40, flex: 1, backgroundColor: '#fff' }}>
+    <View style={{ marginTop: 40, flex: 1, backgroundColor: '#fff' }}>
       {items.length === 0 ? (
         <View style={{ padding: 16 }}>
           <Text style={{ fontSize: 18 }}>Giỏ hàng của bạn đang trống.</Text>
@@ -41,7 +43,10 @@ export default function Cart() {
           contentContainerStyle={styles.itemsListContainer}
           data={items}
           renderItem={renderItem}
-          keyExtractor={(item) => item.product.id.toString()}
+          keyExtractor={(item, index) =>
+            item?.product?._id?.toString() || item?.id?.toString() || index.toString()
+          }
+
           ListFooterComponent={Totals}
         />
       )}

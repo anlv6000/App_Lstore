@@ -46,7 +46,8 @@ export default function ProductDetails() {
 
   async function onAddToCart() {
     if (product) {
-      await addItemToCart(product._id); // ✅ dùng await để chờ dữ liệu
+      await addItemToCart(product);
+
     }
   }
 
