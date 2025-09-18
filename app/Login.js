@@ -7,8 +7,8 @@ export default function Login() {
   const router = useRouter();
 
   const handleLogin = () => {
-    login(); // ✅ cập nhật trạng thái đăng nhập
-    router.replace('/(tabs)'); // ✅ điều hướng đến trang chính
+    login(); 
+    router.replace('/(tabs)'); 
   };
 
   return (

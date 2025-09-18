@@ -16,7 +16,7 @@ export function CartProvider(props) {
       return;
     }
 
-    const id = product._id.toString(); // đảm bảo id là chuỗi
+    const id = product._id.toString();
 
     setItems((prevItems) => {
       const existingItem = prevItems.find((item) => item.id === id);
@@ -28,7 +28,7 @@ export function CartProvider(props) {
             id,
             qty: 1,
             product,
-            totalPrice: product.price,
+            totalPrice: product.price, 
           },
         ];
       }
@@ -39,7 +39,7 @@ export function CartProvider(props) {
           return {
             ...item,
             qty: newQty,
-            totalPrice: newQty * product.price,
+            totalPrice: newQty * product.price, 
           };
         }
         return item;

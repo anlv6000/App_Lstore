@@ -13,7 +13,7 @@ export default function Cart() {
     return (
       <View style={styles.cartLineTotal}>
         <Text style={[styles.lineLeft, styles.lineTotal]}>Total</Text>
-        <Text style={styles.lineRight}>$ {total}</Text>
+        <Text style={styles.lineRight}> {total} đ</Text>
       </View>
     );
   }
@@ -25,7 +25,7 @@ export default function Cart() {
         <Text style={styles.lineLeft}>
           {name} x {item.qty}
         </Text>
-        <Text style={styles.lineRight}>$ {item.totalPrice}</Text>
+        <Text style={styles.lineRight}> {item.totalPrice} đ</Text>
       </View>
     );
   }
@@ -54,7 +54,7 @@ export default function Cart() {
       <View style={{ padding: 16 }}>
         <Button
           title="Đặt hàng"
-          onPress={() => router.push('/Checkout')} // ✅ điều hướng đúng với Expo Router
+          onPress={() => router.push('/Checkout')} 
           disabled={items.length === 0}
         />
       </View>
