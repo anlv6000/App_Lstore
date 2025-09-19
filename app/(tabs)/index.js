@@ -1,54 +1,49 @@
-import { useState } from 'react';
-import { Alert, Button, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
+import { useAuth } from '../../context/AuthContext';
 import HomeGoc from '../homegoc.js';
+import Login from '../Login';
+import { useRouter } from 'expo-router';
 
-export default function Main() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  const handleLogin = async () => {
-    try {
-      const res = await fetch('http://103.249.117.201:12732/ping');
-
-      if (res.ok) {
-        console.log('✅ Backend sẵn sàng');
-        setIsLoggedIn(true);
-      } else {
-        Alert.alert('Lỗi kết nối', 'Máy chủ phản hồi lỗi. Vui lòng thử lại sau.');
-      }
-    } catch (err) {
-      console.error('❌ Không kết nối được backend:', err);
-      Alert.alert('Lỗi kết nối', 'Không thể kết nối tới máy chủ. Kiểm tra mạng hoặc thử lại sau.');
-    }
-  };
-
+  const { isLoggedIn, user } = useAuth();
+  const router = useRouter();
   if (!isLoggedIn) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.title}>Chào mừng đến với LTStore!</Text>
-        
-        <Text style={styles.title}>Ấn đăng nhập để tiếp tục</Text>
-        <Button title="Đăng nhập" onPress={handleLogin} />
-      </View>
-    );
+    return <Login />;
   }
-
+  const firstChar = user?.username?.[0]?.toUpperCase() || '?';
   return (
     <View style={{ flex: 1 }}>
+      <TouchableOpacity
+        style={styles.avatar}
+        onPress={() => router.push('/UserInfo')}
+        activeOpacity={0.7}
+      >
+        <Text style={styles.avatarText}>{firstChar}</Text>
+      </TouchableOpacity>
       <HomeGoc />
     </View>
   );
-}
+// ...existing code...
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
+  avatar: {
+    position: 'absolute',
+    top: 18,
+    right: 18,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: '#007aff',
     alignItems: 'center',
-    backgroundColor: '#f5f5f5',
+    justifyContent: 'center',
+    zIndex: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 4,
   },
-  title: {
-    fontSize: 24,
+  avatarText: {
+    color: '#fff',
     fontWeight: 'bold',
-    marginBottom: 20,
+    fontSize: 22,
   },
 });

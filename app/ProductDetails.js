@@ -20,7 +20,7 @@ export default function ProductDetails() {
   const [product, setProduct] = useState(null);
   const [mainImage, setMainImage] = useState(null);
 
-  const { addItemToCart } = useContext(CartContext);
+  const { addToCart } = useContext(CartContext);
 
   useEffect(() => {
     async function fetchProductDetail() {
@@ -47,13 +47,11 @@ export default function ProductDetails() {
   async function onAddToCart() {
     if (product) {
       let productToAdd = { ...product };
-
       if (product.type === 'preorder') {
         productToAdd.price = Math.floor(product.price / 10); 
         productToAdd.name = `${product.name} (PreOrder)`;
       }
-
-      await addItemToCart(productToAdd);
+      await addToCart(productToAdd);
     }
   }
 

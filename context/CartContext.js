@@ -5,7 +5,7 @@ export const CartContext = createContext();
 export function CartProvider(props) {
   const [items, setItems] = useState([]);
 
-  function addItemToCart(product) {
+  function addToCart(product) {
     if (
       !product ||
       typeof product !== 'object' ||
@@ -47,6 +47,23 @@ export function CartProvider(props) {
     });
   }
 
+  function removeFromCart(product) {
+    if (!product || typeof product !== 'object' || !product._id) return;
+    const id = product._id.toString();
+    setItems((prevItems) => {
+      const existingItem = prevItems.find((item) => item.id === id);
+      if (!existingItem) return prevItems;
+      if (existingItem.qty <= 1) {
+        return prevItems.filter((item) => item.id !== id);
+      }
+      return prevItems.map((item) =>
+        item.id === id
+          ? { ...item, qty: item.qty - 1, totalPrice: (item.qty - 1) * item.product.price }
+          : item
+      );
+    });
+  }
+
   function getItemsCount() {
     return items.reduce((sum, item) => sum + item.qty, 0);
   }
@@ -57,7 +74,7 @@ export function CartProvider(props) {
 
   return (
     <CartContext.Provider
-      value={{ items, setItems, getItemsCount, addItemToCart, getTotalPrice }}
+      value={{ items, setItems, getItemsCount, addToCart, removeFromCart, getTotalPrice }}
     >
       {props.children}
     </CartContext.Provider>

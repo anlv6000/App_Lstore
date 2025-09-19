@@ -23,7 +23,8 @@ export default function RootLayout() {
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="ProductDetails" />
             <Stack.Screen name="Cart" />
-            <Stack.Screen name="Login" /> 
+            <Stack.Screen name="Login" options={{ headerLeft: () => null }} />
+            <Stack.Screen name="Register" options={{ headerLeft: () => null }} />
             <Stack.Screen name="+not-found" />
           </Stack>
         </CartProvider>
