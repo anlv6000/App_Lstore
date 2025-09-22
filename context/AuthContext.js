@@ -3,15 +3,26 @@ import React, { createContext, useContext, useState } from 'react';
 // ✅ Tạo context
 const AuthContext = createContext();
 
-// ✅ Provider component
-export const AuthProvider = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Mặc định là chưa đăng nhập
 
-  const login = () => setIsLoggedIn(true);   // Đăng nhập
-  const logout = () => setIsLoggedIn(false); // Đăng xuất
+export const AuthProvider = ({ children }) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userId, setUserId] = useState(null);
+  const [username, setUsername] = useState('');
+
+  // login nhận user info
+  const login = (user) => {
+    setIsLoggedIn(true);
+    setUserId(user?._id || null);
+    setUsername(user?.username || '');
+  };
+  const logout = () => {
+    setIsLoggedIn(false);
+    setUserId(null);
+    setUsername('');
+  };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, userId, username, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

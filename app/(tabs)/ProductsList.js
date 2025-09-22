@@ -28,8 +28,8 @@ export function ProductsList() {
           throw new Error('Phản hồi không phải JSON');
         }
         const data = await response.json();
-        const availableProducts = data.filter((item) => item.type === 'available');
-        const formattedProducts = availableProducts.map((item) => ({
+        // Lấy tất cả sản phẩm, không filter type
+        const formattedProducts = data.map((item) => ({
           id: item._id,
           name: item.name,
           price: item.price,
@@ -38,6 +38,7 @@ export function ProductsList() {
           stock: item.stock,
           thumbnail: item.images?.[0],
           createdAt: item.createdAt,
+          type: item.type,
         }));
         setProducts(formattedProducts);
       } catch (error) {
@@ -75,6 +76,7 @@ export function ProductsList() {
 
 
   function renderProduct({ item: product }) {
+    const isPreorder = product.type === 'preorder';
     return (
       <Product
         {...product}
@@ -84,6 +86,8 @@ export function ProductsList() {
           });
         }}
         smallThumb
+        priceColor={isPreorder ? '#007aff' : undefined}
+        preorderLabel={isPreorder}
       />
     );
   }

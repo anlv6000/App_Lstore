@@ -1,20 +1,19 @@
 import { useContext, useEffect, useState } from 'react';
 import {
-  Alert,
-  Image,
-  Platform,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  ToastAndroid,
-  TouchableOpacity,
-  View
+    Alert,
+    Image,
+    Platform,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    ToastAndroid,
+    TouchableOpacity,
+    View
 } from 'react-native';
 
 import { useLocalSearchParams } from 'expo-router';
 import { CartContext } from '../context/CartContext.js';
-
 export default function ProductDetails() {
   const { productId } = useLocalSearchParams();
   const [product, setProduct] = useState(null);
@@ -48,10 +47,10 @@ export default function ProductDetails() {
     if (product) {
       let productToAdd = { ...product };
       if (product.type === 'preorder') {
-        productToAdd.price = Math.floor(product.price / 10); 
+        productToAdd.price = Math.floor(product.price / 10);
         productToAdd.name = `${product.name} (PreOrder)`;
       }
-      await addToCart(productToAdd);
+      await addToCart(productToAdd); // CartContext now uses username internally
     }
   }
 
@@ -129,7 +128,6 @@ export default function ProductDetails() {
     </SafeAreaView>
   );
 }
-
 
 const styles = StyleSheet.create({
   mainImage: {

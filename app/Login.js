@@ -21,8 +21,9 @@ export default function Login() {
       // Gọi API GET để kiểm tra user
       const res = await fetch(`http://103.249.117.201:12732/users?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
       const data = await res.json();
-      if (Array.isArray(data) && data.length > 0) {
-        login();
+        if (Array.isArray(data) && data.length > 0) {
+          // Lưu userId và username vào context
+          login(data[0]);
       } else {
         Alert.alert('Lỗi', 'Sai tài khoản hoặc mật khẩu.');
       }

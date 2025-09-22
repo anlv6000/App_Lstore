@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Alert, Button, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 export default function Register() {
@@ -8,7 +8,59 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
+  const [usernameError, setUsernameError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const router = useRouter();
+
+  // Kiểm tra trùng username realtime
+  useEffect(() => {
+    if (!username) {
+      setUsernameError('');
+      return;
+    }
+    let cancelled = false;
+    const check = setTimeout(() => {
+      fetch(`http://103.249.117.201:12732/users?username=${encodeURIComponent(username)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (cancelled) return;
+          // Nếu username ở thời điểm fetch khác username hiện tại, bỏ qua
+          if (
+            username !== '' &&
+            Array.isArray(data) &&
+            data.some(u => u.username === username)
+          ) {
+            setUsernameError('Tên đăng nhập đã tồn tại');
+          } else {
+            setUsernameError('');
+          }
+        })
+        .catch(() => {
+          if (!cancelled) setUsernameError('Không kiểm tra được tên đăng nhập');
+        });
+    }, 500);
+    return () => {
+      cancelled = true;
+      clearTimeout(check);
+    };
+  }, [username]);
+
+  // Kiểm tra password mạnh realtime
+  useEffect(() => {
+    if (!password) {
+      setPasswordError('');
+      return;
+    }
+    if (password.length < 8) {
+      setPasswordError('Mật khẩu phải trên 8 ký tự');
+    } else if (!/[A-Z]/.test(password)) {
+      setPasswordError('Mật khẩu phải có ít nhất 1 chữ hoa');
+    } else if (!/[^A-Za-z0-9]/.test(password)) {
+      setPasswordError('Mật khẩu phải có ký tự đặc biệt');
+    } else {
+      setPasswordError('');
+    }
+  }, [password]);
 
   const handleRegister = async () => {
     setLoading(true);
@@ -17,8 +69,12 @@ export default function Register() {
       setLoading(false);
       return;
     }
+    if (usernameError || passwordError) {
+      setLoading(false);
+      return;
+    }
     if (password !== confirmPassword) {
-      Alert.alert('Lỗi', 'Mật khẩu không khớp.');
+      setPasswordError('Mật khẩu không khớp');
       setLoading(false);
       return;
     }
@@ -28,20 +84,20 @@ export default function Register() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           username,
-          passwordHash: password, // backend sẽ hash lại hoặc bạn có thể hash trước
+          passwordHash: password,
           email,
           role: 'customer',
         }),
       });
       const data = await res.json();
-  if (res.ok && (data.success || data._id || data.username)) {
+      if (res.ok && (data.success || data._id || data.username)) {
         Alert.alert('Thành công', 'Đăng ký thành công! Hãy đăng nhập.');
         router.replace('/Login');
       } else {
-        Alert.alert('Lỗi', data.error || 'Đăng ký thất bại');
+        setUsernameError(data.error || 'Đăng ký thất bại');
       }
     } catch (err) {
-      Alert.alert('Lỗi', 'Không thể kết nối máy chủ.');
+      setUsernameError('Không thể kết nối máy chủ.');
     }
     setLoading(false);
   };
@@ -56,6 +112,7 @@ export default function Register() {
         onChangeText={setUsername}
         autoCapitalize="none"
       />
+      {!!usernameError && <Text style={styles.errorText}>{usernameError}</Text>}
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -71,6 +128,7 @@ export default function Register() {
         onChangeText={setPassword}
         secureTextEntry
       />
+      {!!passwordError && <Text style={styles.errorText}>{passwordError}</Text>}
       <TextInput
         style={styles.input}
         placeholder="Nhập lại mật khẩu"
@@ -78,7 +136,7 @@ export default function Register() {
         onChangeText={setConfirmPassword}
         secureTextEntry
       />
-      <Button title={loading ? 'Đang đăng ký...' : 'Đăng ký'} onPress={handleRegister} disabled={loading} />
+  <Button title={loading ? 'Đang đăng ký...' : 'Đăng ký'} onPress={handleRegister} disabled={loading || !!usernameError || !!passwordError} />
       <TouchableOpacity onPress={() => router.replace('/Login')} style={styles.loginLink}>
         <Text style={styles.loginText}>Đã có tài khoản? Đăng nhập</Text>
       </TouchableOpacity>
@@ -117,5 +175,12 @@ const styles = StyleSheet.create({
     color: '#007aff',
     fontSize: 16,
     textDecorationLine: 'underline',
+  },
+  errorText: {
+    color: 'red',
+    marginBottom: 8,
+    alignSelf: 'flex-start',
+    marginLeft: 4,
+    fontSize: 14,
   },
 });

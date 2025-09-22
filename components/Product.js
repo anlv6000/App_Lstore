@@ -1,6 +1,6 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-export function Product({ name, price, thumbnail, onPress, smallThumb }) {
+export function Product({ name, price, thumbnail, onPress, smallThumb, priceColor, preorderLabel }) {
   return (
     <TouchableOpacity style={[styles.card, smallThumb && styles.cardSmall]} onPress={onPress}>
       <Image
@@ -9,7 +9,16 @@ export function Product({ name, price, thumbnail, onPress, smallThumb }) {
       />
       <View style={styles.infoContainer}>
         <Text style={[styles.name, smallThumb && styles.nameSmall]} numberOfLines={1}>{name}</Text>
-        <Text style={[styles.price, smallThumb && styles.priceSmall]}>{price}</Text>
+        <Text
+          style={[
+            styles.price,
+            smallThumb && styles.priceSmall,
+            priceColor ? { color: priceColor } : null,
+          ]}
+        >
+          {price}
+          {preorderLabel ? <Text style={{ color: priceColor || '#007aff', fontSize: 12 }}> (preorder)</Text> : null}
+        </Text>
       </View>
     </TouchableOpacity>
   );
