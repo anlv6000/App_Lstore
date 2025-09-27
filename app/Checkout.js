@@ -19,7 +19,7 @@ export default function Checkout() {
     }
     setLoading(true);
     try {
-      await fetch('http://localhost:3000/api/orders', {
+      await fetch('http://103.249.117.201:12732/deliveries', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

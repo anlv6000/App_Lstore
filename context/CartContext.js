@@ -127,7 +127,7 @@ export function CartProvider(props) {
         setItems([]);
       }
     } catch (err) {
-      console.error('❌ Không thể đồng bộ cart backend:', err);
+      console.error('❌   Không thể đồng bộ cart backend:', err);
     }
   }
 

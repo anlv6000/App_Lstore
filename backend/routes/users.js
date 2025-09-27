@@ -11,7 +11,24 @@ router.get('/', async (req, res) => {
     res.status(500).json({ error: 'Lỗi khi lấy danh sách người dùng' });
   }
 });
+// ✅ Tìm người dùng theo username (query param)
+router.get('/search/by-username', async (req, res) => {
+  try {
+    const { username } = req.query;
+    if (!username) {
+      return res.status(400).json({ error: 'Thiếu tham số username' });
+    }
 
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ error: 'Không tìm thấy người dùng' });
+    }
+
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: 'Lỗi khi tìm người dùng theo username' });
+  }
+});
 // ✅ Lấy chi tiết người dùng theo ID
 router.get('/:id', async (req, res) => {
   try {
