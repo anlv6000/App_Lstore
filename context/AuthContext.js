@@ -8,21 +8,24 @@ export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userId, setUserId] = useState(null);
   const [username, setUsername] = useState('');
+  const [role, setRole] = useState('customer');
 
   // login nhận user info
   const login = (user) => {
     setIsLoggedIn(true);
     setUserId(user?._id || null);
     setUsername(user?.username || '');
+    setRole(user?.role || 'customer');
   };
   const logout = () => {
     setIsLoggedIn(false);
     setUserId(null);
     setUsername('');
+    setRole('customer');
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, userId, username, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, userId, username, role, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

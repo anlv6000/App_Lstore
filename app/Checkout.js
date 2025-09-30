@@ -1,20 +1,27 @@
 import { useRouter } from 'expo-router';
 import { useContext, useState } from 'react';
 import { ActivityIndicator, Alert, Button, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { useAuth } from '../context/AuthContext';
 import { CartContext } from '../context/CartContext';
 
 export default function Checkout() {
   const { items, getTotalPrice } = useContext(CartContext);
+  const { userId, username } = useAuth();
   const [name, setName] = useState('');
-  const [address, setAddress] = useState('');
+  const [street, setStreet] = useState('');
   const [phone, setPhone] = useState('');
-  const [note, setNote] = useState('');
+  const [city, setCity] = useState('');
+  const [district, setDistrict] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handlePayment = async () => {
-    if (!name || !address || !phone) {
+    if (!name || !street || !phone || !city || !district) {
       Alert.alert('Lỗi', 'Vui lòng điền đầy đủ thông tin.');
+      return;
+    }
+    if (!userId) {
+      Alert.alert('Lỗi', 'Không xác định được tài khoản.');
       return;
     }
     setLoading(true);
@@ -23,12 +30,15 @@ export default function Checkout() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name,
-          address,
-          phone,
-          note,
-          items,
-          total: getTotalPrice(),
+          userId,
+          username, // thêm username ngay dưới userId
+          address: {
+            recipient: name,
+            phone,
+            street,
+            city,
+            district
+          }
         }),
       });
       setLoading(false);
@@ -44,15 +54,9 @@ export default function Checkout() {
       <Text style={styles.title}>Thông tin mua hàng</Text>
       <TextInput
         style={styles.input}
-        placeholder="Họ và tên"
+        placeholder="Họ và tên người nhận"
         value={name}
         onChangeText={setName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Địa chỉ giao hàng"
-        value={address}
-        onChangeText={setAddress}
       />
       <TextInput
         style={styles.input}
@@ -63,18 +67,48 @@ export default function Checkout() {
       />
       <TextInput
         style={styles.input}
-        placeholder="Ghi chú (tuỳ chọn)"
-        value={note}
-        onChangeText={setNote}
+        placeholder="Địa chỉ (số nhà, đường, ... )"
+        value={street}
+        onChangeText={setStreet}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Quận/Huyện"
+        value={district}
+        onChangeText={setDistrict}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Tỉnh/Thành phố"
+        value={city}
+        onChangeText={setCity}
       />
       <View style={styles.summary}>
         <Text style={styles.summaryTitle}>Tóm tắt đơn hàng</Text>
-        {items.map((item, idx) => (
-          <Text key={idx} style={styles.summaryItem}>
-            {item?.product?.name || 'Sản phẩm'} x {item.qty} - {item.totalPrice} đ
-          </Text>
-        ))}
-        <Text style={styles.total}>Tổng cộng: {getTotalPrice()} đ</Text>
+        {items.map((item, idx) => {
+          let name = item?.product?.name || 'Sản phẩm';
+          let isPreorder = false;
+          let price = item?.product?.price || 0;
+          if (item?.product?.type === 'preorder' || /\(PreOrder\)/i.test(name)) {
+            isPreorder = true;
+            price = Math.floor((item?.product?.price || 0) / 10);
+            if (!/\(PreOrder\)/i.test(name)) {
+              name = name + ' (PreOrder)';
+            }
+          }
+          return (
+            <Text key={idx} style={styles.summaryItem}>
+              {name} x {item.qty} - {price * item.qty} đ{isPreorder ? ' (PreOrder)' : ''}
+            </Text>
+          );
+        })}
+        <Text style={styles.total}>Tổng cộng: {items.reduce((sum, item) => {
+          let price = item?.product?.price || 0;
+          if (item?.product?.type === 'preorder' || /\(PreOrder\)/i.test(item?.product?.name || '')) {
+            price = Math.floor(price / 10);
+          }
+          return sum + price * item.qty;
+        }, 0)} đ</Text>
       </View>
       {loading ? (
         <ActivityIndicator size="large" color="#d2691e" />

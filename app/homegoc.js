@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { Pressable, TouchableOpacity } from 'react-native';
+import { useAuth } from '../context/AuthContext';
 
 import {
   FlatList,
@@ -16,6 +17,7 @@ export default function HomeGoc() {
   const [preOrderProducts, setPreOrderProducts] = useState([]);
   const [availableProducts, setAvailableProducts] = useState([]);
   const navigation = useNavigation();
+  const { role } = useAuth();
 
   useEffect(() => {
     fetch('http://103.249.117.201:12732/products')
@@ -45,69 +47,89 @@ export default function HomeGoc() {
 
 
   return (
-    <ScrollView style={styles.container}>
-      <Image source={require('../assets/logo.png')} style={styles.logo} />
-
-      <TextInput
-        style={styles.searchBar}
-        placeholder="Tìm kiếm sản phẩm..."
-        placeholderTextColor="#999"
-      />
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.carousel}>
-        <Image source={require('../assets/products/33tos1.png')} style={styles.carouselImage} />
-        <Image source={require('../assets/products/33tos2.png')} style={styles.carouselImage} />
-        <Image source={require('../assets/products/33tos3.png')} style={styles.carouselImage} />
-      </ScrollView>
-
-      <Text style={styles.sectionTitle}>Danh mục</Text>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.carousel2}>
-        <Image source={require('../assets/danhmuc_1.png')} style={styles.carouselImage2} />
-        <Image source={require('../assets/danhmuc_2.png')} style={styles.carouselImage2} />
-        <Image source={require('../assets/danhmuc_3.png')} style={styles.carouselImage2} />
-        <Image source={require('../assets/danhmuc_4.png')} style={styles.carouselImage2} />
-        <Image source={require('../assets/danhmuc_5.webp')} style={styles.carouselImage2} />
-        <Image source={require('../assets/danhmuc_6.webp')} style={styles.carouselImage2} />
-        <Image source={require('../assets/danhmuc_7.webp')} style={styles.carouselImage2} />
-      </ScrollView>
-
-      {/* Sản phẩm đặt trước */}
-      <Text style={styles.sectionTitle}>Sản phẩm Đặt Trước</Text>
-      <FlatList
-        horizontal
-        data={preOrderProducts}
-        keyExtractor={(item) => item._id}
-        renderItem={renderProduct}
-        showsHorizontalScrollIndicator={false}
-      />
-
-      {/* Sản phẩm có sẵn */}
-      <Text style={styles.sectionTitle}>Sản phẩm Có Sẵn</Text>
-      <FlatList
-        horizontal
-        data={availableProducts}
-        keyExtractor={(item) => item._id}
-        renderItem={renderProduct}
-        showsHorizontalScrollIndicator={false}
-      />
-
-
-      <View style={styles.infoSection}>
-        <Text style={styles.sectionTitle}>Thông tin cửa hàng</Text>
-
-        <View style={styles.infoBlock}>
-          <Text style={styles.infoTitle}>LTStore</Text>
-          <Text>Địa chỉ: Số 1, 266 Đường Thụy Phương, Từ Liêm, Hà Nội</Text>
-          <Text>Điện thoại: 0543970667</Text>
-          <Text>Email: ltstore@gmail.com</Text>
-        </View>
-
-        <View style={styles.infoBlock}>
-          <Text style={styles.infoTitle}>Kết nối với chúng tôi</Text>
-          <Text>- YouTube | Facebook | Instagram | TikTok</Text>
-          <Text>- Thanh toán: MoMo, chuyển khoản</Text>
-        </View>
+    <View style={{ flex: 1 }}>
+      {/* Header with DeliveryAdmin button */}
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingTop: 37, backgroundColor: '#fff' }}>
+        <Image source={require('../assets/logo.png')} style={styles.logo} />
+        {role === 'admin' && (
+          <Pressable
+            style={({ pressed }) => [
+              {
+                backgroundColor: pressed ? '#e0e0e0' : '#f2f2f2',
+                borderRadius: 20,
+                paddingVertical: 6,
+                paddingHorizontal: 14,
+                marginLeft: 10,
+              },
+            ]}
+            onPress={() => navigation.navigate('DeliveryAdmin')}
+          >
+            <Text style={{ fontWeight: 'bold', color: '#1976d2' }}>Đơn hàng</Text>
+          </Pressable>
+        )}
       </View>
-    </ScrollView>
+      <ScrollView style={styles.container}>
+        {/* ...existing code... */}
+        <TextInput
+          style={styles.searchBar}
+          placeholder="Tìm kiếm sản phẩm..."
+          placeholderTextColor="#999"
+        />
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.carousel}>
+          <Image source={require('../assets/products/33tos1.png')} style={styles.carouselImage} />
+          <Image source={require('../assets/products/33tos2.png')} style={styles.carouselImage} />
+          <Image source={require('../assets/products/33tos3.png')} style={styles.carouselImage} />
+        </ScrollView>
+
+        <Text style={styles.sectionTitle}>Danh mục</Text>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.carousel2}>
+          <Image source={require('../assets/danhmuc_1.png')} style={styles.carouselImage2} />
+          <Image source={require('../assets/danhmuc_2.png')} style={styles.carouselImage2} />
+          <Image source={require('../assets/danhmuc_3.png')} style={styles.carouselImage2} />
+          <Image source={require('../assets/danhmuc_4.png')} style={styles.carouselImage2} />
+          <Image source={require('../assets/danhmuc_5.webp')} style={styles.carouselImage2} />
+          <Image source={require('../assets/danhmuc_6.webp')} style={styles.carouselImage2} />
+          <Image source={require('../assets/danhmuc_7.webp')} style={styles.carouselImage2} />
+        </ScrollView>
+
+        {/* Sản phẩm đặt trước */}
+        <Text style={styles.sectionTitle}>Sản phẩm Đặt Trước</Text>
+        <FlatList
+          horizontal
+          data={preOrderProducts}
+          keyExtractor={(item) => item._id}
+          renderItem={renderProduct}
+          showsHorizontalScrollIndicator={false}
+        />
+
+        {/* Sản phẩm có sẵn */}
+        <Text style={styles.sectionTitle}>Sản phẩm Có Sẵn</Text>
+        <FlatList
+          horizontal
+          data={availableProducts}
+          keyExtractor={(item) => item._id}
+          renderItem={renderProduct}
+          showsHorizontalScrollIndicator={false}
+        />
+
+        <View style={styles.infoSection}>
+          <Text style={styles.sectionTitle}>Thông tin cửa hàng</Text>
+
+          <View style={styles.infoBlock}>
+            <Text style={styles.infoTitle}>LTStore</Text>
+            <Text>Địa chỉ: Số 1, 266 Đường Thụy Phương, Từ Liêm, Hà Nội</Text>
+            <Text>Điện thoại: 0543970667</Text>
+            <Text>Email: ltstore@gmail.com</Text>
+          </View>
+
+          <View style={styles.infoBlock}>
+            <Text style={styles.infoTitle}>Kết nối với chúng tôi</Text>
+            <Text>- YouTube | Facebook | Instagram | TikTok</Text>
+            <Text>- Thanh toán: MoMo, chuyển khoản</Text>
+          </View>
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 const styles = StyleSheet.create({
@@ -115,12 +137,11 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: '#fff',
-    marginTop: 37,
   },
   logo: {
     width: 140,
     height: 60,
-    marginBottom: 10,
+    
     alignSelf: 'center',
   },
   searchBar: {

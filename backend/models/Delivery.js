@@ -6,6 +6,10 @@ const deliverySchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
+  username: {
+    type: String,
+    required: false 
+  },
   address: {
     recipient: { type: String, required: true },
     phone:     { type: String, required: true },

@@ -23,6 +23,19 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// ✅ Lấy đơn giao hàng theo username
+router.get('/username/:username', async (req, res) => {
+  try {
+    const deliveries = await Delivery.find({ username: req.params.username });
+    if (deliveries.length === 0) {
+      return res.status(404).json({ error: 'Không tìm thấy đơn giao hàng cho username này' });
+    }
+    res.json(deliveries);
+  } catch (err) {
+    res.status(500).json({ error: 'Lỗi server khi tìm đơn giao hàng theo username' });
+  }
+});
+
 // ✅ Tạo đơn giao hàng mới
 router.post('/', async (req, res) => {
   try {

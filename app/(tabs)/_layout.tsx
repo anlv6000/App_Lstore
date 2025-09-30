@@ -8,10 +8,11 @@ import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { useAuth } from '../../context/AuthContext';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-
+  const { role } = useAuth();
   return (
     <Tabs
       screenOptions={{
@@ -48,7 +49,16 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <Ionicons name="cart" color={color} size={28} />,
         }}
       />
-
+      {/* Tab chỉ cho admin */}
+      {role === 'admin' && (
+        <Tabs.Screen
+          name="DeliveryAdmin"
+          options={{
+            title: 'Đơn hàng',
+            tabBarIcon: ({ color }) => <Ionicons name="list" color={color} size={28} />,
+          }}
+        />
+      )}
     </Tabs>
   );
 }

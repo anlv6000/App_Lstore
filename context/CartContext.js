@@ -156,22 +156,76 @@ export function CartProvider(props) {
     }
   }
 
-  function removeFromCart(product) {
+  async function removeFromCart(product) {
     if (!product || typeof product !== 'object' || !product._id) return;
+    if (!username) return;
     const id = product._id.toString();
-    setItems((prevItems) => {
-      const existingItem = prevItems.find((item) => item.id === id);
-      if (!existingItem) return prevItems;
-      if (existingItem.qty <= 1) {
-        return prevItems.filter((item) => item.id !== id);
+    try {
+      // Lấy cart hiện tại của user theo username
+      let res = await fetch(`http://103.249.117.201:12732/carts?username=${encodeURIComponent(username)}`);
+      let data = await res.json();
+      let cartId = null;
+      let itemsArr = [];
+      if (Array.isArray(data) && data.length > 0) {
+        const userCart = data.find(cart => cart.username === username);
+        if (userCart) {
+          cartId = userCart._id;
+          itemsArr = userCart.items || [];
+        }
       }
-      return prevItems.map((item) =>
-        item.id === id
-          ? { ...item, qty: item.qty - 1, totalPrice: (item.qty - 1) * item.product.price }
-          : item
-      );
-    });
-    // Có thể thêm logic gọi backend để cập nhật cart nếu muốn
+      // Giảm số lượng hoặc xóa sản phẩm khỏi cart
+      const existing = itemsArr.find(item => item.productId === id || item.productId?.toString() === id);
+      if (existing) {
+        if (existing.quantity <= 1) {
+          itemsArr = itemsArr.filter(item => !(item.productId === id || item.productId?.toString() === id));
+        } else {
+          itemsArr = itemsArr.map(item =>
+            (item.productId === id || item.productId?.toString() === id)
+              ? { ...item, quantity: item.quantity - 1 }
+              : item
+          );
+        }
+        // Gửi lên backend
+        if (cartId) {
+          await fetch(`http://103.249.117.201:12732/carts/${cartId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ items: itemsArr })
+          });
+        }
+      }
+      // Cập nhật lại cart local (fetch lại cart để đồng bộ product info)
+      try {
+        const res2 = await fetch(`http://103.249.117.201:12732/carts?username=${encodeURIComponent(username)}`);
+        const data2 = await res2.json();
+        const userCart2 = Array.isArray(data2) ? data2.find(cart => cart.username === username) : null;
+        if (userCart2 && userCart2.items) {
+          const itemsWithProduct = await Promise.all(
+            userCart2.items.map(async (item) => {
+              let product = null;
+              try {
+                const res = await fetch(`http://103.249.117.201:12732/products/${item.productId}`);
+                product = await res.json();
+              } catch {}
+              return {
+                id: item.productId,
+                qty: item.quantity,
+                product: product || { _id: item.productId },
+                totalPrice: product && product.price ? product.price * item.quantity : 0,
+                username
+              };
+            })
+          );
+          setItems(itemsWithProduct);
+        } else {
+          setItems([]);
+        }
+      } catch {
+        setItems([]);
+      }
+    } catch (err) {
+      console.error('❌   Không thể cập nhật cart backend:', err);
+    }
   }
 
 

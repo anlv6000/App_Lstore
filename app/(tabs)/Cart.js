@@ -9,7 +9,14 @@ export default function Cart() {
   const { items, getTotalPrice, addToCart, removeFromCart } = useContext(CartContext);
 
   function Totals() {
-    const total = getTotalPrice();
+    // Tính lại tổng: nếu là preorder thì giá = 1/10
+    const total = items.reduce((sum, item) => {
+      let price = item?.product?.price || 0;
+      if (item?.product?.type === 'preorder' || /(PreOrder)/i.test(item?.product?.name || '')) {
+        price = Math.floor(price / 10);
+      }
+      return sum + price * item.qty;
+    }, 0);
     return (
       <View style={styles.cartLineTotal}>
         <Text style={[styles.lineLeft, styles.lineTotal]}>Total: </Text>
@@ -19,8 +26,19 @@ export default function Cart() {
   }
 
   function renderItem({ item }) {
-    const name = item?.product?.name || 'Sản phẩm';
+    let name = item?.product?.name || 'Sản phẩm';
     const image = item?.product?.image || item?.product?.img || null;
+    let isPreorder = false;
+    let price = item?.product?.price || 0;
+    // Kiểm tra nếu là preorder (theo type hoặc tên có (PreOrder))
+    if (item?.product?.type === 'preorder' || /\(PreOrder\)/i.test(name)) {
+      isPreorder = true;
+      price = Math.floor((item?.product?.price || 0) / 10);
+      // Đảm bảo tên có label preorder
+      if (!/\(PreOrder\)/i.test(name)) {
+        name = name + ' (PreOrder)';
+      }
+    }
     return (
       <View style={styles.cartLine}>
         {image ? (
@@ -35,6 +53,7 @@ export default function Cart() {
         <View style={{ flex: 1 }}>
           <Text style={styles.lineLeft} numberOfLines={1}>
             {name}
+            {isPreorder && <Text style={{ color: '#007aff', fontSize: 12 }}> (PreOrder)</Text>}
           </Text>
         </View>
         <View style={styles.qtyBox}>
@@ -47,7 +66,7 @@ export default function Cart() {
               <Text style={styles.qtyBtnText}>+</Text>
             </TouchableOpacity>
           </View>
-          <Text style={styles.priceText}>{item.qty > 0 ? item.totalPrice : 0} đ</Text>
+          <Text style={styles.priceText}>{item.qty > 0 ? price * item.qty : 0} đ</Text>
         </View>
       </View>
     );
