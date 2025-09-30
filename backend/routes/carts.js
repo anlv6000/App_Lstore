@@ -11,7 +11,16 @@ router.get('/', async (req, res) => {
     res.status(500).json({ error: 'Lỗi khi lấy danh sách giỏ hàng' });
   }
 });
-
+// ✅ Lấy giỏ hàng theo username
+router.get('/username/:username', async (req, res) => {
+  try {
+    const carts = await Cart.find({ username: req.params.username });
+    if (carts.length === 0) return res.status(404).json({ error: 'Không tìm thấy giỏ hàng cho username này' });
+    res.json(carts);
+  } catch (err) {
+    res.status(500).json({ error: 'Lỗi server khi lấy giỏ hàng theo username' });
+  }
+});
 // ✅ Lấy chi tiết giỏ hàng theo ID
 router.get('/:id', async (req, res) => {
   try {

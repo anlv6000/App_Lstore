@@ -1,15 +1,15 @@
 import { useContext, useEffect, useState } from 'react';
 import {
-    Alert,
-    Image,
-    Platform,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    ToastAndroid,
-    TouchableOpacity,
-    View
+  Alert,
+  Image,
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  ToastAndroid,
+  TouchableOpacity,
+  View
 } from 'react-native';
 
 import { useLocalSearchParams } from 'expo-router';
@@ -47,10 +47,13 @@ export default function ProductDetails() {
     if (product) {
       let productToAdd = { ...product };
       if (product.type === 'preorder') {
-        productToAdd.price = Math.floor(product.price / 10);
-        productToAdd.name = `${product.name} (PreOrder)`;
+        productToAdd = {
+          ...productToAdd,
+          price: Math.floor(product.price / 10),
+          name: `${product.name} (PreOrder)`
+        };
       }
-      await addToCart(productToAdd); // CartContext now uses username internally
+      await addToCart(productToAdd);
     }
   }
 

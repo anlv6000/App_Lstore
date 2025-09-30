@@ -91,6 +91,23 @@ export default function Register() {
       });
       const data = await res.json();
       if (res.ok && (data.success || data._id || data.username)) {
+        // Sau khi đăng ký thành công, tạo cart cho user này
+        try {
+          await fetch('http://103.249.117.201:12732/carts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              userId: data._id || "000000000000000000000000",
+              username: username,
+              products: [],
+              createdAt: "2025-01-01T00:00:00.000Z",
+              updatedAt: "2025-01-01T00:00:00.000Z"
+            })
+          });
+        } catch (e) {
+          // Không cần báo lỗi nếu tạo cart thất bại, chỉ log
+          console.error('Không thể tạo cart cho user mới:', e);
+        }
         Alert.alert('Thành công', 'Đăng ký thành công! Hãy đăng nhập.');
         router.replace('/Login');
       } else {
