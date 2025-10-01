@@ -19,6 +19,8 @@ export default function HomeGoc() {
   const navigation = useNavigation();
   const { role } = useAuth();
 
+  const [showPreorderList, setShowPreorderList] = useState(false);
+
   useEffect(() => {
     fetch('http://103.249.117.201:12732/products')
       .then((res) => res.json())
@@ -83,13 +85,20 @@ export default function HomeGoc() {
 
         <Text style={styles.sectionTitle}>Danh mục</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.carousel2}>
-          <Image source={require('../assets/danhmuc_1.png')} style={styles.carouselImage2} />
+          <TouchableOpacity onPress={() => navigation.navigate('PreorderListScreen')}>
+            <Image source={require('../assets/danhmuc_1.png')} style={styles.carouselImage2} />
+          </TouchableOpacity>
+          
+          <TouchableOpacity onPress={() => navigation.navigate('BandaiListScreen')}>
+            <Image source={require('../assets/danhmuc_8.webp')} style={styles.carouselImage2} />
+          </TouchableOpacity>
           <Image source={require('../assets/danhmuc_2.png')} style={styles.carouselImage2} />
           <Image source={require('../assets/danhmuc_3.png')} style={styles.carouselImage2} />
           <Image source={require('../assets/danhmuc_4.png')} style={styles.carouselImage2} />
           <Image source={require('../assets/danhmuc_5.webp')} style={styles.carouselImage2} />
           <Image source={require('../assets/danhmuc_6.webp')} style={styles.carouselImage2} />
           <Image source={require('../assets/danhmuc_7.webp')} style={styles.carouselImage2} />
+         
         </ScrollView>
 
         {/* Sản phẩm đặt trước */}
@@ -101,6 +110,8 @@ export default function HomeGoc() {
           renderItem={renderProduct}
           showsHorizontalScrollIndicator={false}
         />
+
+        {/* ...danh sách preorder đã chuyển sang trang riêng... */}
 
         {/* Sản phẩm có sẵn */}
         <Text style={styles.sectionTitle}>Sản phẩm Có Sẵn</Text>
