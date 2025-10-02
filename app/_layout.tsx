@@ -23,6 +23,8 @@ export default function RootLayout() {
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="ProductDetails" />
             <Stack.Screen name="Cart" />
+            <Stack.Screen name="MessageScreen" options={{ title: 'Tin nhắn' }} />
+            <Stack.Screen name="ConversationListScreen" options={{ title: 'Danh sách hội thoại' }} />
             <Stack.Screen name="Login" options={{ headerLeft: () => null }} />
             <Stack.Screen name="Register" options={{ headerLeft: () => null }} />
             <Stack.Screen name="+not-found" />

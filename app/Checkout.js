@@ -1,11 +1,19 @@
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useContext, useState } from 'react';
 import { ActivityIndicator, Alert, Button, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useAuth } from '../context/AuthContext';
 import { CartContext } from '../context/CartContext';
 
 export default function Checkout() {
-  const { items, getTotalPrice } = useContext(CartContext);
+  const params = useLocalSearchParams();
+  const { items: cartItems, getTotalPrice } = useContext(CartContext);
+  let buyNowItems = [];
+  if (params.buyNow) {
+    try {
+      buyNowItems = JSON.parse(params.buyNow);
+    } catch {}
+  }
+  const items = buyNowItems.length > 0 ? buyNowItems : cartItems;
   const { userId, username } = useAuth();
   const [name, setName] = useState('');
   const [street, setStreet] = useState('');
@@ -31,14 +39,18 @@ export default function Checkout() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           userId,
-          username, // thêm username ngay dưới userId
+          username,
           address: {
             recipient: name,
             phone,
             street,
             city,
             district
-          }
+          },
+          items: items.map(item => ({
+            productId: item.product?._id || item.product?.id || item.productId,
+            quantity: item.qty || item.quantity || 1
+          }))
         }),
       });
       setLoading(false);

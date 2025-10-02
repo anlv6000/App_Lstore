@@ -22,7 +22,7 @@ export default function PreorderListScreen() {
       onPress={() => navigation.navigate('ProductDetails', { productId: item._id })}
     >
       <Image
-        source={item.images && item.images[0] ? { uri: item.images[0] } : require('../assets/products/33tos1.png')}
+        source={item.images && item.images[0] ? { uri: item.images[0] } : require('../assets/products/33tos1.jpg')}
         style={styles.productImage}
       />
       <Text style={styles.productName}>{item.name || item.title}</Text>

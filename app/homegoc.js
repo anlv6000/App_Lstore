@@ -50,25 +50,59 @@ export default function HomeGoc() {
 
   return (
     <View style={{ flex: 1 }}>
-      {/* Header with DeliveryAdmin button */}
+      {/* Header with DeliveryAdmin button & Chat logo */}
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingTop: 37, backgroundColor: '#fff' }}>
         <Image source={require('../assets/logo.png')} style={styles.logo} />
-        {role === 'admin' && (
-          <Pressable
-            style={({ pressed }) => [
-              {
-                backgroundColor: pressed ? '#e0e0e0' : '#f2f2f2',
-                borderRadius: 20,
-                paddingVertical: 6,
-                paddingHorizontal: 14,
-                marginLeft: 10,
-              },
-            ]}
-            onPress={() => navigation.navigate('DeliveryAdmin')}
-          >
-            <Text style={{ fontWeight: 'bold', color: '#1976d2' }}>Đơn hàng</Text>
-          </Pressable>
-        )}
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          {role === 'admin' && (
+            <>
+              <Pressable
+                style={({ pressed }) => [
+                  {
+                    backgroundColor: pressed ? '#e0e0e0' : '#f2f2f2',
+                    borderRadius: 20,
+                    paddingVertical: 6,
+                    paddingHorizontal: 14,
+                    marginLeft: 10,
+                  },
+                ]}
+                onPress={() => navigation.navigate('DeliveryAdmin')}
+              >
+                <Text style={{ fontWeight: 'bold', color: '#1976d2' }}>Đơn hàng</Text>
+              </Pressable>
+              <TouchableOpacity
+                style={{ marginLeft: 16, padding: 6, borderRadius: 20, backgroundColor: '#e3f2fd' }}
+                onPress={() => navigation.navigate('ConversationListScreen')}
+              >
+                <Text style={{ color: '#1976d2', fontWeight: 'bold', fontSize: 16 }}>Chat</Text>
+              </TouchableOpacity>
+            </>
+          )}
+          {role !== 'admin' && (
+            <TouchableOpacity
+              style={{ marginLeft: 16, padding: 6, borderRadius: 20, backgroundColor: '#e3f2fd' }}
+              onPress={async () => {
+                // Gửi tin nhắn mở đầu trước khi vào chat
+                try {
+                  const username = require('../context/AuthContext').useAuth().username;
+                  await fetch('http://103.249.117.201:12732/messages', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      from: username,
+                      to: 'admin',
+                      message: 'Xin chào shop!',
+                      conversationId: username
+                    })
+                  });
+                } catch {}
+                navigation.navigate('MessageScreen');
+              }}
+            >
+              <Image source={require('../assets/icon.png')} style={{ width: 32, height: 32 }} />
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
       <ScrollView style={styles.container}>
         {/* ...existing code... */}
@@ -78,9 +112,9 @@ export default function HomeGoc() {
           placeholderTextColor="#999"
         />
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.carousel}>
-          <Image source={require('../assets/products/33tos1.png')} style={styles.carouselImage} />
-          <Image source={require('../assets/products/33tos2.png')} style={styles.carouselImage} />
-          <Image source={require('../assets/products/33tos3.png')} style={styles.carouselImage} />
+          <Image source={require('../assets/products/33tos1.jpg')} style={styles.carouselImage} />
+          <Image source={require('../assets/products/33tos2.jpg')} style={styles.carouselImage} />
+          <Image source={require('../assets/products/33tos3.jpg')} style={styles.carouselImage} />
         </ScrollView>
 
         <Text style={styles.sectionTitle}>Danh mục</Text>

@@ -19,7 +19,9 @@ export default function ProductDetails() {
   const [product, setProduct] = useState(null);
   const [mainImage, setMainImage] = useState(null);
 
-  const { addToCart } = useContext(CartContext);
+  const { addToCart, setItems } = useContext(CartContext);
+  const [buying, setBuying] = useState(false);
+  const router = require('expo-router').useRouter();
 
   useEffect(() => {
     async function fetchProductDetail() {
@@ -57,6 +59,25 @@ export default function ProductDetails() {
     }
   }
 
+  async function onBuyNow() {
+    if (!product) return;
+    setBuying(true);
+    let productToAdd = { ...product };
+    if (product.type === 'preorder') {
+      productToAdd = {
+        ...productToAdd,
+        price: Math.floor(product.price / 10),
+        name: `${product.name} (PreOrder)`
+      };
+    }
+    setBuying(false);
+    // Truyền sản phẩm tạm sang Checkout qua params
+    router.push({
+      pathname: '/Checkout',
+      params: { buyNow: JSON.stringify([{ product: productToAdd, qty: 1 }]) }
+    });
+  }
+
   const handleAddToCart = () => {
     onAddToCart();
     if (Platform.OS === 'android' && ToastAndroid) {
@@ -64,6 +85,10 @@ export default function ProductDetails() {
     } else {
       Alert.alert("Thông báo", "Đã thêm vào giỏ hàng!");
     }
+  };
+
+  const handleBuyNow = () => {
+    onBuyNow();
   };
 
   if (!product) {
@@ -106,21 +131,41 @@ export default function ProductDetails() {
           </Text>
 
           {product.type === 'preorder' ? (
-            <TouchableOpacity
-              onPress={handleAddToCart}
-              style={styles.preorderButton}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.buttonText}>Đặt trước</Text>
-            </TouchableOpacity>
+            <>
+              <TouchableOpacity
+                onPress={handleAddToCart}
+                style={styles.preorderButton}
+                activeOpacity={0.7}
+              >
+                <Text style={styles.buttonText}>Đặt trước</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handleBuyNow}
+                style={[styles.preorderButton, { marginTop: 10 }]}
+                activeOpacity={0.7}
+                disabled={buying}
+              >
+                <Text style={styles.buttonText}>{buying ? 'Đang xử lý...' : 'Mua ngay'}</Text>
+              </TouchableOpacity>
+            </>
           ) : (
-            <TouchableOpacity
-              onPress={handleAddToCart}
-              style={styles.orderButton}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.buttonText}>Đặt hàng</Text>
-            </TouchableOpacity>
+            <>
+              <TouchableOpacity
+                onPress={handleAddToCart}
+                style={styles.orderButton}
+                activeOpacity={0.7}
+              >
+                <Text style={styles.buttonText}>Đặt hàng</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handleBuyNow}
+                style={[styles.orderButton, { marginTop: 10 }]}
+                activeOpacity={0.7}
+                disabled={buying}
+              >
+                <Text style={styles.buttonText}>{buying ? 'Đang xử lý...' : 'Mua ngay'}</Text>
+              </TouchableOpacity>
+            </>
           )}
 
         </View>

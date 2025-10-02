@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { Button, Image, StyleSheet, Text, View } from 'react-native';
 
 export default function QRPayment() {
   const router = useRouter();
@@ -10,11 +10,11 @@ export default function QRPayment() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Quét mã QR để thanh toán</Text>
+      <Text style={styles.title}>Đơn hàng của bạn sẽ được giao sớm.</Text>
       <View style={styles.qrBox}>
-        {/* <Image source={require('../assets/qr.png')} style={styles.qrImage} /> */}
+       <Image source={require('../assets/qr.png')} style={styles.qrImage} /> 
       </View>
-      <Text style={styles.confirm}>Sau khi thanh toán, nhấn OK để xác nhận đơn hàng.</Text>
+      <Text style={styles.confirm}>Nhấn OK để xác nhận đơn hàng.</Text>
       <Button title="OK" onPress={handleOK} />
     </View>
   );
