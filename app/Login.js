@@ -24,6 +24,7 @@ export default function Login() {
       if (data && data.passwordHash) {
         if (data.passwordHash === password) {
           login(data);
+          router.replace('/'); 
         } else {
           Alert.alert('Lỗi', 'Sai tài khoản hoặc mật khẩu.');
         }

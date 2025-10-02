@@ -59,6 +59,13 @@ export default function TabLayout() {
           }}
         />
       )}
+      <Tabs.Screen
+        name="AccountInfo"
+        options={{
+          title: 'Tài khoản',
+          tabBarIcon: ({ color }) => <Ionicons name="person" color={color} size={28} />,
+        }}
+      />
     </Tabs>
   );
 }
