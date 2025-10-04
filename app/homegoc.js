@@ -3,9 +3,13 @@ import { useEffect, useState } from 'react';
 import { Pressable, TouchableOpacity } from 'react-native';
 import { useAuth } from '../context/AuthContext';
 
+
 import {
+  Alert,
   FlatList,
   Image,
+  Linking,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -33,7 +37,29 @@ export default function HomeGoc() {
       .catch((err) => console.error('Fetch error:', err));
   }, []);
 
-  
+  const storeAddress = 'Số 1, 266 Đường Thụy Phương, Từ Liêm, Hà Nội';
+  const storeLocation = { latitude: 21.0315, longitude: 105.7820 };
+
+  const openMap = async (address = storeAddress) => {
+    const query = encodeURIComponent(address);
+    const url = Platform.OS === 'ios'
+      ? `maps://?q=${query}`
+      : `https://www.google.com/maps/search/?api=1&query=${query}`;
+
+    try {
+      const supported = await Linking.canOpenURL(url);
+      if (supported) {
+        await Linking.openURL(url);
+      } else {
+        // fallback to web url
+        await Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${query}`);
+      }
+    } catch (err) {
+      Alert.alert('Lỗi', 'Không thể mở bản đồ.');
+    }
+  };
+
+  const lat = 21.0315, lng = 105.7820;
 
   const renderProduct = ({ item }) => (
     <TouchableOpacity
@@ -95,7 +121,7 @@ export default function HomeGoc() {
                       conversationId: username
                     })
                   });
-                } catch {}
+                } catch { }
                 navigation.navigate('MessageScreen');
               }}
             >
@@ -122,7 +148,7 @@ export default function HomeGoc() {
           <TouchableOpacity onPress={() => navigation.navigate('PreorderListScreen')}>
             <Image source={require('../assets/danhmuc_1.png')} style={styles.carouselImage2} />
           </TouchableOpacity>
-          
+
           <TouchableOpacity onPress={() => navigation.navigate('BandaiListScreen')}>
             <Image source={require('../assets/danhmuc_8.webp')} style={styles.carouselImage2} />
           </TouchableOpacity>
@@ -132,7 +158,7 @@ export default function HomeGoc() {
           <Image source={require('../assets/danhmuc_5.webp')} style={styles.carouselImage2} />
           <Image source={require('../assets/danhmuc_6.webp')} style={styles.carouselImage2} />
           <Image source={require('../assets/danhmuc_7.webp')} style={styles.carouselImage2} />
-         
+
         </ScrollView>
 
         {/* Sản phẩm đặt trước */}
@@ -165,8 +191,11 @@ export default function HomeGoc() {
             <Text>Địa chỉ: Số 1, 266 Đường Thụy Phương, Từ Liêm, Hà Nội</Text>
             <Text>Điện thoại: 0543970667</Text>
             <Text>Email: ltstore@gmail.com</Text>
+            <TouchableOpacity style={styles.mapBtn} onPress={() => openMap()}>
+              <Text style={{ color: '#fff', fontWeight: 'bold' }}>Xem bản đồ</Text>
+            </TouchableOpacity>
           </View>
-
+        
           <View style={styles.infoBlock}>
             <Text style={styles.infoTitle}>Kết nối với chúng tôi</Text>
             <Text>- YouTube | Facebook | Instagram | TikTok</Text>
@@ -186,7 +215,7 @@ const styles = StyleSheet.create({
   logo: {
     width: 140,
     height: 60,
-    
+
     alignSelf: 'center',
   },
   searchBar: {
@@ -271,6 +300,14 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     marginRight: 10,
     resizeMode: 'cover',
+  },
+  mapBtn: {
+    marginTop: 10,
+    backgroundColor: '#1976d2',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    alignSelf: 'flex-start',
   },
 
 

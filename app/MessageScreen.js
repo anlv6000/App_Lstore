@@ -1,6 +1,7 @@
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { io } from 'socket.io-client';
 import { useAuth } from '../context/AuthContext';
 
 export default function MessageScreen() {
@@ -10,12 +11,68 @@ export default function MessageScreen() {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const flatListRef = useRef();
+  const socket = useRef(null);
+  const pollingRef = useRef(null);
+  const [isAtBottom, setIsAtBottom] = useState(true);
 
-  // Xác định hội thoại: user thì là username của mình, admin thì lấy từ params
   const conversationId = role === 'admin' ? params.conversationId : username;
   const chatWith = role === 'admin' ? params.conversationId : 'admin';
 
-  // Lấy tin nhắn từ backend
+  // Kết nối socket và lắng nghe tin nhắn realtime
+  useEffect(() => {
+    if (!conversationId) return;
+
+    socket.current = io('http://103.249.117.201');
+    socket.current.emit('join', conversationId);
+
+    socket.current.on('newMessage', msg => {
+      if (!msg?._id) return;
+      setMessages(prev => {
+        const exists = prev.some(m => m.id === msg._id);
+        if (exists) return prev;
+        return [...prev, {
+          id: msg._id,
+          sender: msg.from,
+          text: msg.message,
+          timestamp: msg.timestamp
+        }];
+      });
+    });
+
+    // Polling nhẹ mỗi 0.5s để đảm bảo tin nhắn mới luôn hiển thị
+    pollingRef.current = setInterval(async () => {
+      try {
+        const res = await fetch(`http://103.249.117.201:12732/messages/${conversationId}`);
+        const data = await res.json();
+        const latest = data.map(msg => ({
+          id: msg._id,
+          sender: msg.from,
+          text: msg.message,
+          timestamp: msg.timestamp
+        }));
+        if (latest.length > messages.length) {
+          setMessages(latest);
+        }
+      } catch { }
+    }, 500);
+
+    return () => {
+      socket.current.disconnect();
+      clearInterval(pollingRef.current);
+    };
+  }, [conversationId]);
+
+  // Scroll xuống cuối mỗi khi messages thay đổi
+  useEffect(() => {
+    if (messages.length > 0 && isAtBottom) {
+      setTimeout(() => {
+        flatListRef.current?.scrollToEnd({ animated: true });
+      }, 100);
+    }
+  }, [messages]);
+
+
+  // Lấy tin nhắn ban đầu từ backend
   useEffect(() => {
     if (!conversationId) return;
     setLoading(true);
@@ -28,6 +85,7 @@ export default function MessageScreen() {
           text: msg.message,
           timestamp: msg.timestamp
         }));
+
         // Nếu là user, chưa có tin nhắn thì gửi tự động 'Xin chào shop!'
         if (role !== 'admin' && msgs.length === 0) {
           try {
@@ -50,18 +108,19 @@ export default function MessageScreen() {
                 timestamp: saved.timestamp
               });
             }
-          } catch {}
+          } catch { }
         }
+
         setMessages(msgs);
         setLoading(false);
-        setTimeout(() => {
-          flatListRef.current?.scrollToEnd({ animated: true });
-        }, 200);
       })
-      .catch(() => { setMessages([]); setLoading(false); });
-  }, [conversationId, role, username]);
+      .catch(() => {
+        setMessages([]);
+        setLoading(false);
+      });
+  }, [conversationId]);
 
-  // Gửi tin nhắn lên backend
+  // Gửi tin nhắn lên backend và cập nhật giao diện ngay
   const sendMessage = async () => {
     if (!input.trim() || !conversationId) return;
     const newMsg = {
@@ -70,26 +129,26 @@ export default function MessageScreen() {
       message: input,
       conversationId
     };
+    const tempId = Date.now().toString(); // ID tạm để hiển thị ngay
+    setMessages(prev => [...prev, {
+      id: tempId,
+      sender: username,
+      text: input,
+      timestamp: new Date().toISOString()
+    }]);
     setInput('');
+    setTimeout(() => {
+      flatListRef.current?.scrollToEnd({ animated: true });
+    }, 100);
+
     try {
-      const res = await fetch('http://103.249.117.201:12732/messages', {
+      await fetch('http://103.249.117.201:12732/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newMsg)
       });
-      if (res.ok) {
-        const saved = await res.json();
-        setMessages(prev => [...prev, {
-          id: saved._id,
-          sender: saved.from,
-          text: saved.message,
-          timestamp: saved.timestamp
-        }]);
-        setTimeout(() => {
-          flatListRef.current?.scrollToEnd({ animated: true });
-        }, 100);
-      }
-    } catch {}
+      // Tin nhắn thật sẽ được nhận qua socket hoặc polling
+    } catch { }
   };
 
   return (
@@ -103,14 +162,23 @@ export default function MessageScreen() {
         <FlatList
           ref={flatListRef}
           data={messages}
-          keyExtractor={item => item.id}
+          extraData={messages}
+          keyExtractor={item => item.id.toString()}
           renderItem={({ item }) => (
             <View style={[styles.messageRow, item.sender === username ? styles.myMessage : styles.otherMessage]}>
               <Text style={styles.messageText}>{item.text}</Text>
             </View>
           )}
           style={styles.messageList}
+          onScroll={({ nativeEvent }) => {
+            const { layoutMeasurement, contentOffset, contentSize } = nativeEvent;
+            const paddingToBottom = 20;
+            const atBottom = layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom;
+            setIsAtBottom(atBottom);
+          }}
+          scrollEventThrottle={100}
         />
+
       )}
       <View style={styles.inputRow}>
         <TextInput
@@ -126,6 +194,9 @@ export default function MessageScreen() {
     </View>
   );
 }
+
+
+
 
 const styles = StyleSheet.create({
   container: {

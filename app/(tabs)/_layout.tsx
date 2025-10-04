@@ -59,6 +59,21 @@ export default function TabLayout() {
           }}
         />
       )}
+
+      <Tabs.Screen
+        name="Gallery"
+        options={{
+          title: 'Gallery',
+          tabBarIcon: ({ color }) => <Ionicons name="images" color={color} size={28} />,
+        }}
+      />
+      <Tabs.Screen
+        name="MapScreen"
+        options={{
+          title: 'Live Map',
+          tabBarIcon: ({ color }) => <Ionicons name="map" color={color} size={28} />,
+        }}
+      />
       <Tabs.Screen
         name="AccountInfo"
         options={{

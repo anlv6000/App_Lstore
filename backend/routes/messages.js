@@ -1,3 +1,4 @@
+module.exports = function(io) {
 const express = require('express');
 const router = express.Router();
 const Message = require('../models/Message');
@@ -31,6 +32,7 @@ router.post('/', async (req, res) => {
     });
 
     const savedMessage = await newMessage.save();
+    io.to(conversationId).emit('newMessage', savedMessage);
     res.status(201).json(savedMessage);
   } catch (err) {
     res.status(500).json({ error: 'Lỗi khi gửi tin nhắn' });
@@ -47,4 +49,5 @@ router.get('/conversations/list', async (req, res) => {
   }
 });
 
-module.exports = router;
+  return router;
+};
