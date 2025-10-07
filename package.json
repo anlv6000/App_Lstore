@@ -12,6 +12,7 @@
     "auto-push": "git add . && git commit -m \"Auto commit\" && git push origin master"
   },
   "dependencies": {
+    "@react-native-community/cli": "latest",
     "@expo/vector-icons": "^14.1.0",
     "@react-navigation/bottom-tabs": "^7.4.7",
     "@react-navigation/elements": "^2.3.8",
