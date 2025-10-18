@@ -10,7 +10,7 @@ export default function DeliveryAdmin() {
   const fetchOrders = async () => {
     setLoading(true);
     try {
-      const res = await fetch('http://103.249.117.201:12732/deliveries');
+      const res = await fetch('https://ctechlab-e.io.vn/deliveries');
       const data = await res.json();
       setOrders(Array.isArray(data) ? data : []);
     } catch {

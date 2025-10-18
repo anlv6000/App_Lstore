@@ -18,7 +18,7 @@ export default function Login() {
       return;
     }
     try {
-      const res = await fetch(`http://103.249.117.201:12732/users/search/by-username?username=${encodeURIComponent(username)}`);
+      const res = await fetch(`https://ctechlab-e.io.vn/users/search/by-username?username=${encodeURIComponent(username)}`);
       const data = await res.json();
 
       if (data && data.passwordHash) {

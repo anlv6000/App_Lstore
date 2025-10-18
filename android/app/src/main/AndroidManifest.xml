@@ -28,6 +28,7 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="ltstore"/>
+        <data android:scheme="exp+ltstore"/>
       </intent-filter>
     </activity>
   </application>

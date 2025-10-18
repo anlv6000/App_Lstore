@@ -182,7 +182,7 @@ export default function ProductDetails() {
   useEffect(() => {
     if (!productId) return;
     setLoadingReviews(true);
-    fetch(`http://103.249.117.201:12732/reviews/product/${productId}`)
+    fetch(`https://ctechlab-e.io.vn/reviews/product/${productId}`)
       .then(res => res.json())
       .then(data => {
         setReviews(data);
@@ -309,7 +309,7 @@ export default function ProductDetails() {
                     style={styles.submitReviewBtn}
                     onPress={async () => {
                       try {
-                        const res = await fetch('http://103.249.117.201:12732/reviews', {
+                        const res = await fetch('https://ctechlab-e.io.vn/reviews', {
                           method: 'POST',
                           headers: { 'Content-Type': 'application/json' },
                           body: JSON.stringify({

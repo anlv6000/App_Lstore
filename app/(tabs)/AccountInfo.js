@@ -12,7 +12,7 @@ export default function AccountInfo() {
   useEffect(() => {
     if (!userId) return;
     setLoading(true);
-    fetch(`http://103.249.117.201:12732/users/${userId}`)
+    fetch(`https://ctechlab-e.io.vn/users/${userId}`)
       .then(res => res.json())
       .then(data => {
         setUser(data);

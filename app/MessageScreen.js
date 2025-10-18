@@ -76,7 +76,7 @@ export default function MessageScreen() {
   useEffect(() => {
     if (!conversationId) return;
     setLoading(true);
-    fetch(`http://103.249.117.201:12732/messages/${conversationId}`)
+    fetch(`https://ctechlab-e.io.vn/messages/${conversationId}`)
       .then(res => res.json())
       .then(async data => {
         const msgs = data.map(msg => ({
@@ -89,7 +89,7 @@ export default function MessageScreen() {
         // Nếu là user, chưa có tin nhắn thì gửi tự động 'Xin chào shop!'
         if (role !== 'admin' && msgs.length === 0) {
           try {
-            const res2 = await fetch('http://103.249.117.201:12732/messages', {
+            const res2 = await fetch('https://ctechlab-e.io.vn/messages', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({

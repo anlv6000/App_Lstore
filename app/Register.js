@@ -20,7 +20,7 @@ export default function Register() {
     }
     let cancelled = false;
     const check = setTimeout(() => {
-      fetch(`http://103.249.117.201:12732/users?username=${encodeURIComponent(username)}`)
+      fetch(`https://ctechlab-e.io.vn/users?username=${encodeURIComponent(username)}`)
         .then(res => res.json())
         .then(data => {
           if (cancelled) return;
@@ -79,7 +79,7 @@ export default function Register() {
       return;
     }
     try {
-      const res = await fetch('http://103.249.117.201:12732/users', {
+      const res = await fetch('https://ctechlab-e.io.vn/users', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -93,7 +93,7 @@ export default function Register() {
       if (res.ok && (data.success || data._id || data.username)) {
         // Sau khi đăng ký thành công, tạo cart cho user này
         try {
-          await fetch('http://103.249.117.201:12732/carts', {
+          await fetch('https://ctechlab-e.io.vn/carts', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

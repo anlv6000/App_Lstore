@@ -7,7 +7,7 @@ export default function PreorderListScreen() {
   const navigation = useNavigation();
 
   useEffect(() => {
-    fetch('http://103.249.117.201:12732/products')
+    fetch('https://ctechlab-e.io.vn/products')
       .then((res) => res.json())
       .then((data) => {
         const preOrder = data.filter((item) => item.type === 'preorder');

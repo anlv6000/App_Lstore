@@ -24,10 +24,10 @@ export default function Gallery() {
         setLoading(true);
         try {
             // 1. get all usernames
-            const res = await fetch('http://103.249.117.201:12732/images/users/list');
+            const res = await fetch('https://ctechlab-e.io.vn/images/users/list');
             const users = await res.json();
             // 2. fetch each user's images
-            const lists = await Promise.all(users.map(u => fetch(`http://103.249.117.201:12732/images/${encodeURIComponent(u)}`).then(r => r.json()).catch(() => null)));
+            const lists = await Promise.all(users.map(u => fetch(`https://ctechlab-e.io.vn/images/${encodeURIComponent(u)}`).then(r => r.json()).catch(() => null)));
             const flat = [];
             lists.forEach(l => {
                 if (l && l.images) {
@@ -76,7 +76,7 @@ export default function Gallery() {
             });
 
             // Send to backend (expects multipart/form-data endpoint /images/upload)
-            const res = await fetch('http://103.249.117.201:12732/images/upload', {
+            const res = await fetch('https://ctechlab-e.io.vn/images/upload', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'multipart/form-data'
@@ -132,7 +132,7 @@ export default function Gallery() {
             {
                 text: 'Xóa', style: 'destructive', onPress: async () => {
                     try {
-                        const res = await fetch(`http://103.249.117.201:12732/images/${encodeURIComponent(item.username)}/${encodeURIComponent(item.filename)}`, { method: 'DELETE' });
+                        const res = await fetch(`https://ctechlab-e.io.vn/images/${encodeURIComponent(item.username)}/${encodeURIComponent(item.filename)}`, { method: 'DELETE' });
                         if (res.ok) {
                             Alert.alert('Đã xóa');
                             setImages(imgs => imgs.filter(i => !(i.username === item.username && i.filename === item.filename)));

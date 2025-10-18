@@ -11,7 +11,7 @@ export default function ConversationListScreen() {
   useEffect(() => {
     // Chỉ admin mới xem danh sách hội thoại
     if (role === 'admin') {
-      fetch('http://103.249.117.201:12732/messages/conversations/list')
+      fetch('https://ctechlab-e.io.vn/messages/conversations/list')
         .then(res => res.json())
         .then(data => setConversations(data))
         .catch(() => setConversations([]));

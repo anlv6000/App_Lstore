@@ -26,7 +26,7 @@ export default function HomeGoc() {
   const [showPreorderList, setShowPreorderList] = useState(false);
 
   useEffect(() => {
-    fetch('http://103.249.117.201:12732/products')
+    fetch('https://ctechlab-e.io.vn/products')
       .then((res) => res.json())
       .then((data) => {
         const preOrder = data.filter((item) => item.type === 'preorder');
@@ -111,7 +111,7 @@ export default function HomeGoc() {
                 // Gửi tin nhắn mở đầu trước khi vào chat
                 try {
                   const username = require('../context/AuthContext').useAuth().username;
-                  await fetch('http://103.249.117.201:12732/messages', {
+                  await fetch('https://ctechlab-e.io.vn/messages', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({

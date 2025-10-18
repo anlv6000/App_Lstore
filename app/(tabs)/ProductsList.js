@@ -22,7 +22,7 @@ export function ProductsList() {
   useEffect(() => {
     async function fetchProducts() {
       try {
-        const response = await fetch('http://103.249.117.201:12732/products');
+        const response = await fetch('https://ctechlab-e.io.vn/products');
         const contentType = response.headers.get('content-type');
         if (!contentType || !contentType.includes('application/json')) {
           throw new Error('Phản hồi không phải JSON');
