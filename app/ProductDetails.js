@@ -62,7 +62,7 @@ function ReviewItem({ review, username, onReplySuccess }) {
               if (!reply.trim()) return;
               setSending(true);
               try {
-                const res = await fetch(`http://103.249.117.201:12732/reviews/reply/${review._id}`, {
+                const res = await fetch(`https://ctechlab-e.io.vn/reviews/reply/${review._id}`, {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({ user: username, content: reply })
@@ -105,7 +105,7 @@ export default function ProductDetails() {
   useEffect(() => {
     async function fetchProductDetail() {
       try {
-        const response = await fetch(`http://103.249.117.201:12732/products/${productId}`);
+        const response = await fetch(`https://ctechlab-e.io.vn/products/${productId}`);
 
         const data = await response.json();
         setProduct(data);

@@ -22,7 +22,7 @@ export default function MessageScreen() {
   useEffect(() => {
     if (!conversationId) return;
 
-    socket.current = io('http://103.249.117.201');
+    socket.current = io('https://ctechlab-e.io.vn');
     socket.current.emit('join', conversationId);
 
     socket.current.on('newMessage', msg => {
@@ -42,7 +42,7 @@ export default function MessageScreen() {
     // Polling nhẹ mỗi 0.5s để đảm bảo tin nhắn mới luôn hiển thị
     pollingRef.current = setInterval(async () => {
       try {
-        const res = await fetch(`http://103.249.117.201:12732/messages/${conversationId}`);
+        const res = await fetch(`https://ctechlab-e.io.vn/messages/${conversationId}`);
         const data = await res.json();
         const latest = data.map(msg => ({
           id: msg._id,

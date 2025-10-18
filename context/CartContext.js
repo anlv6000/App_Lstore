@@ -17,17 +17,17 @@ export function CartProvider(props) {
         return;
       }
       try {
-        let res = await fetch(`http://103.249.117.201:12732/carts?username=${encodeURIComponent(username)}`);
+        let res = await fetch(`https://ctechlab-e.io.vn/carts?username=${encodeURIComponent(username)}`);
         let data = await res.json();
         // Nếu chưa có cart cho username, tạo mới
         if (!Array.isArray(data) || data.length === 0) {
-          await fetch(`http://103.249.117.201:12732/carts`, {
+          await fetch(`https://ctechlab-e.io.vn/carts`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, items: [] })
           });
           // fetch lại cart vừa tạo
-          res = await fetch(`http://103.249.117.201:12732/carts?username=${encodeURIComponent(username)}`);
+          res = await fetch(`https://ctechlab-e.io.vn/carts?username=${encodeURIComponent(username)}`);
           data = await res.json();
         }
         // Chỉ lấy cart có username === username (so sánh tuyệt đối)
@@ -37,7 +37,7 @@ export function CartProvider(props) {
             userCart.items.map(async (item) => {
               let product = null;
               try {
-                const res = await fetch(`http://103.249.117.201:12732/products/${item.productId}`);
+                const res = await fetch(`https://ctechlab-e.io.vn/products/${item.productId}`);
                 product = await res.json();
               } catch {}
               return {
@@ -72,19 +72,19 @@ export function CartProvider(props) {
     const id = product._id.toString();
     try {
       // Lấy cart hiện tại của user theo username
-      let res = await fetch(`http://103.249.117.201:12732/carts?username=${encodeURIComponent(username)}`);
+      let res = await fetch(`https://ctechlab-e.io.vn/carts?username=${encodeURIComponent(username)}`);
       let data = await res.json();
       let cartId = null;
       let itemsArr = [];
       if (!Array.isArray(data) || data.length === 0) {
         // Nếu chưa có cart thì tạo mới
-        await fetch(`http://103.249.117.201:12732/carts`, {
+        await fetch(`https://ctechlab-e.io.vn/carts`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username, items: [] })
         });
         // fetch lại cart vừa tạo
-        res = await fetch(`http://103.249.117.201:12732/carts?username=${encodeURIComponent(username)}`);
+        res = await fetch(`https://ctechlab-e.io.vn/carts?username=${encodeURIComponent(username)}`);
         data = await res.json();
       }
       if (Array.isArray(data) && data.length > 0) {
@@ -108,14 +108,14 @@ export function CartProvider(props) {
       }
       // Gửi lên backend
       if (cartId) {
-        await fetch(`http://103.249.117.201:12732/carts/${cartId}`, {
+        await fetch(`https://ctechlab-e.io.vn/carts/${cartId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ items: itemsArr })
         });
       } else {
         // Trường hợp rất hiếm, nhưng nếu vẫn chưa có cartId thì tạo mới
-        await fetch(`http://103.249.117.201:12732/carts`, {
+        await fetch(`https://ctechlab-e.io.vn/carts`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username, items: itemsArr })
@@ -123,7 +123,7 @@ export function CartProvider(props) {
       }
       // Cập nhật lại cart local (fetch lại cart để đồng bộ product info)
       try {
-        const res2 = await fetch(`http://103.249.117.201:12732/carts?username=${encodeURIComponent(username)}`);
+        const res2 = await fetch(`https://ctechlab-e.io.vn/carts?username=${encodeURIComponent(username)}`);
         const data2 = await res2.json();
         // Chỉ lấy cart có username === username (so sánh tuyệt đối)
         const userCart2 = Array.isArray(data2) ? data2.find(cart => cart.username === username) : null;
@@ -132,7 +132,7 @@ export function CartProvider(props) {
             userCart2.items.map(async (item) => {
               let product = null;
               try {
-                const res = await fetch(`http://103.249.117.201:12732/products/${item.productId}`);
+                const res = await fetch(`https://ctechlab-e.io.vn/products/${item.productId}`);
                 product = await res.json();
               } catch {}
               return {
@@ -162,7 +162,7 @@ export function CartProvider(props) {
     const id = product._id.toString();
     try {
       // Lấy cart hiện tại của user theo username
-      let res = await fetch(`http://103.249.117.201:12732/carts?username=${encodeURIComponent(username)}`);
+      let res = await fetch(`https://ctechlab-e.io.vn/carts?username=${encodeURIComponent(username)}`);
       let data = await res.json();
       let cartId = null;
       let itemsArr = [];
@@ -187,7 +187,7 @@ export function CartProvider(props) {
         }
         // Gửi lên backend
         if (cartId) {
-          await fetch(`http://103.249.117.201:12732/carts/${cartId}`, {
+          await fetch(`https://ctechlab-e.io.vn/carts/${cartId}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ items: itemsArr })
@@ -196,7 +196,7 @@ export function CartProvider(props) {
       }
       // Cập nhật lại cart local (fetch lại cart để đồng bộ product info)
       try {
-        const res2 = await fetch(`http://103.249.117.201:12732/carts?username=${encodeURIComponent(username)}`);
+        const res2 = await fetch(`https://ctechlab-e.io.vn/carts?username=${encodeURIComponent(username)}`);
         const data2 = await res2.json();
         const userCart2 = Array.isArray(data2) ? data2.find(cart => cart.username === username) : null;
         if (userCart2 && userCart2.items) {
@@ -204,7 +204,7 @@ export function CartProvider(props) {
             userCart2.items.map(async (item) => {
               let product = null;
               try {
-                const res = await fetch(`http://103.249.117.201:12732/products/${item.productId}`);
+                const res = await fetch(`https://ctechlab-e.io.vn/products/${item.productId}`);
                 product = await res.json();
               } catch {}
               return {
