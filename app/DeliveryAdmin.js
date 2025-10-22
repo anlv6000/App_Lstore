@@ -32,7 +32,7 @@ export default function DeliveryAdmin() {
   const handleUpdateStatus = async () => {
     if (!selectedOrder) return;
     try {
-      await fetch(`http://103.249.117.201:12732/deliveries/${selectedOrder._id}`, {
+      await fetch(`https://ctechlab-e.io.vn/deliveries/${selectedOrder._id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus }),
@@ -72,7 +72,7 @@ export default function DeliveryAdmin() {
             style={styles.trashBtn}
             onPress={async () => {
               try {
-                await fetch(`http://103.249.117.201:12732/deliveries/${order._id}`, { method: 'DELETE' });
+                await fetch(`https://ctechlab-e.io.vn/deliveries/${order._id}`, { method: 'DELETE' });
                 fetchOrders();
               } catch {}
             }}

@@ -117,7 +117,7 @@ router.post('/upload', upload.single('image'), async (req, res) => {
             .toFormat('webp', { quality: 70 })
             .toFile(`${outputPath}/${filename}`);
 
-        const imageUrl = `http://103.249.117.201:12732/image/uploads/${username}/${filename}`;
+        const imageUrl = `https://ctechlab-e.io.vn/image/uploads/${username}/${filename}`;
 
         // Lưu metadata vào MongoDB
         const imageMeta = {

@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { CartProvider } from '../../context/CartContext.js';
-import { ProductsList } from './ProductsList.js';
+import { ProductsList } from '../ProductsList.js';
 
 export default function Home() {
   return (

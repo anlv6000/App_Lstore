@@ -51,3 +51,5 @@ router.get('/conversations/list', async (req, res) => {
 
   return router;
 };
+
+// "buildType": "apk-bundle"

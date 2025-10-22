@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Alert, FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
 
 // import { CartIcon } from '../../components/CartIcon';
-import { Product } from '../../components/Product';
+import { Product } from '../components/Product';
 
 //tao filter thoi gian nhap
 //them thanh search
