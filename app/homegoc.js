@@ -21,7 +21,7 @@ export default function HomeGoc() {
   const [preOrderProducts, setPreOrderProducts] = useState([]);
   const [availableProducts, setAvailableProducts] = useState([]);
   const navigation = useNavigation();
-  const { role } = useAuth();
+  const { role, username } = useAuth();
 
   const [showPreorderList, setShowPreorderList] = useState(false);
 
@@ -76,41 +76,17 @@ export default function HomeGoc() {
 
   return (
     <View style={{ flex: 1 }}>
-      {/* Header with DeliveryAdmin button & Chat logo */}
-      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingTop: 37, backgroundColor: '#fff' }}>
-        <Image source={require('../assets/logo.png')} style={styles.logo} />
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {role === 'admin' && (
-            <>
-              <Pressable
-                style={({ pressed }) => [
-                  {
-                    backgroundColor: pressed ? '#e0e0e0' : '#f2f2f2',
-                    borderRadius: 20,
-                    paddingVertical: 6,
-                    paddingHorizontal: 14,
-                    marginLeft: 10,
-                  },
-                ]}
-                onPress={() => navigation.navigate('DeliveryAdmin')}
-              >
-                <Text style={{ fontWeight: 'bold', color: '#1976d2' }}>Đơn hàng</Text>
-              </Pressable>
-              <TouchableOpacity
-                style={{ marginLeft: 16, padding: 6, borderRadius: 20, backgroundColor: '#e3f2fd' }}
-                onPress={() => navigation.navigate('ConversationListScreen')}
-              >
-                <Text style={{ color: '#1976d2', fontWeight: 'bold', fontSize: 16 }}>Chat</Text>
-              </TouchableOpacity>
-            </>
-          )}
-          {role !== 'admin' && (
-            <TouchableOpacity
-              style={{ marginLeft: 16, padding: 6, borderRadius: 20, backgroundColor: '#e3f2fd' }}
-              onPress={async () => {
-                // Gửi tin nhắn mở đầu trước khi vào chat
-                try {
-                  const username = require('../context/AuthContext').useAuth().username;
+      {/* Header: top row (logo + chat), second row for admin actions (orders + stats) */}
+      <View style={{ paddingTop: 34, backgroundColor: '#fff', paddingHorizontal: 16 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Image source={require('../assets/logo.png')} style={styles.logo} />
+          {/* Chat button always on top-right */}
+          <TouchableOpacity
+            style={{ marginLeft: 16, padding: 6, borderRadius: 20, backgroundColor: '#e3f2fd' }}
+            onPress={async () => {
+              // Gửi tin nhắn mở đầu trước khi vào chat (non-blocking)
+              try {
+                if (username) {
                   await fetch('https://ctechlab-e.io.vn/messages', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -121,14 +97,51 @@ export default function HomeGoc() {
                       conversationId: username
                     })
                   });
-                } catch { }
-                navigation.navigate('MessageScreen');
-              }}
-            >
-              <Image source={require('../assets/icon.png')} style={{ width: 32, height: 32 }} />
-            </TouchableOpacity>
-          )}
+                }
+              } catch (err) {
+                // ignore
+              }
+              // navigate to chat screen (user-facing)
+              navigation.navigate(role === 'admin' ? 'ConversationListScreen' : 'MessageScreen');
+            }}
+          >
+            <Image source={require('../assets/icon.png')} style={{ width: 32, height: 32 }} />
+          </TouchableOpacity>
         </View>
+
+        {/* Admin-only second row: Đơn hàng + Thống kê */}
+        {role === 'admin' && (
+          <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
+            <Pressable
+              style={({ pressed }) => [
+                {
+                  backgroundColor: pressed ? '#e0e0e0' : '#f2f2f2',
+                  borderRadius: 20,
+                  paddingVertical: 6,
+                  paddingHorizontal: 14,
+                  marginRight: 10,
+                },
+              ]}
+              onPress={() => navigation.navigate('DeliveryAdmin')}
+            >
+              <Text style={{ fontWeight: 'bold', color: '#1976d2' }}>Đơn hàng</Text>
+            </Pressable>
+
+            <Pressable
+              style={({ pressed }) => [
+                {
+                  backgroundColor: pressed ? '#e0e0e0' : '#f2f2f2',
+                  borderRadius: 20,
+                  paddingVertical: 6,
+                  paddingHorizontal: 14,
+                },
+              ]}
+              onPress={() => navigation.navigate('StatsScreen')}
+            >
+              <Text style={{ fontWeight: 'bold', color: '#1976d2' }}>Thống kê</Text>
+            </Pressable>
+          </View>
+        )}
       </View>
       <ScrollView style={styles.container}>
         {/* ...existing code... */}
