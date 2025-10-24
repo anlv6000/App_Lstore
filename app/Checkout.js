@@ -11,7 +11,7 @@ export default function Checkout() {
   if (params.buyNow) {
     try {
       buyNowItems = JSON.parse(params.buyNow);
-    } catch {}
+    } catch { }
   }
   const items = buyNowItems.length > 0 ? buyNowItems : cartItems;
   const { userId, username } = useAuth();
@@ -47,10 +47,24 @@ export default function Checkout() {
             city,
             district
           },
-          items: items.map(item => ({
-            productId: item.product?._id || item.product?.id || item.productId,
-            quantity: item.qty || item.quantity || 1
-          }))
+          items: items.map(item => {
+            const product = item.product || {};
+            let price = product.price || 0;
+
+            // Giảm giá nếu là PreOrder
+            if (product.type === 'preorder' || /\(PreOrder\)/i.test(product.name || '')) {
+              price = Math.floor(price / 10);
+            }
+
+            return {
+              productId: product._id || product.id || item.productId,
+              name: product.name || 'Sản phẩm',
+              price,
+              quantity: item.qty || item.quantity || 1,
+              type: product.type || ''
+            };
+          })
+
         }),
       });
       setLoading(false);

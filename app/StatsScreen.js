@@ -5,6 +5,10 @@ export default function StatsScreen() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showSample, setShowSample] = useState(false);
+  const totalItemsSold = orders.reduce((sum, o) => {
+    if (!Array.isArray(o.items)) return sum;
+    return sum + o.items.reduce((s, i) => s + (i.quantity || 0), 0);
+  }, 0);
 
   useEffect(() => {
     fetchOrders();
@@ -25,68 +29,25 @@ export default function StatsScreen() {
   }
 
   function computeRevenue(order) {
-    // defensive and flexible revenue extraction
     if (!order) return 0;
 
-    const parseNumber = (v) => {
-      if (v == null) return 0;
-      if (typeof v === 'number') return v;
-      if (typeof v === 'string') {
-        // remove currency symbols and spaces, replace comma as thousand separator
-        const cleaned = v.replace(/[^0-9.,-]/g, '').replace(/,/g, '');
-        const n = parseFloat(cleaned);
-        return Number.isFinite(n) ? n : 0;
-      }
-      return 0;
-    };
-
-    // common top-level fields
-    const topFields = [
-      'total', 'totalPrice', 'amount', 'amountPaid', 'paidAmount', 'paid', 'grandTotal', 'grand_total', 'orderTotal', 'subtotal', 'subtotalPrice', 'priceTotal', 'total_amount'
-    ];
-    for (const k of topFields) {
-      if (k in order) {
-        const val = parseNumber(order[k]);
-        if (val) return val;
-      }
+    // Ưu tiên dùng totalPrice nếu có
+    if (typeof order.totalPrice === 'number' && !isNaN(order.totalPrice)) {
+      return order.totalPrice;
     }
 
-    // payment object
-    if (order.payment && typeof order.payment === 'object') {
-      const p = order.payment;
-      const paymentFields = ['amount', 'total', 'paid', 'paidAmount'];
-      for (const k of paymentFields) {
-        if (k in p) {
-          const val = parseNumber(p[k]);
-          if (val) return val;
-        }
-      }
-    }
-
-    // try items/cart arrays
-    const items = Array.isArray(order.items) ? order.items : (Array.isArray(order.cart) ? order.cart : []);
-    if (items && items.length > 0) {
-      return items.reduce((sum, it) => {
-        if (!it) return sum;
-        const candidatePrice = it.price || it.unitPrice || it.productPrice || (it.product && (it.product.price || it.product.unitPrice)) || it.priceText || 0;
-        const price = parseNumber(candidatePrice);
-        const qty = parseNumber(it.quantity || it.qty || it.count || 1) || 1;
-        return sum + price * qty;
+    // Nếu không có totalPrice, tính từ items
+    if (Array.isArray(order.items) && order.items.length > 0) {
+      return order.items.reduce((sum, item) => {
+        const price = typeof item.price === 'number' ? item.price : 0;
+        const quantity = typeof item.quantity === 'number' ? item.quantity : 1;
+        return sum + price * quantity;
       }, 0);
-    }
-
-    // sometimes order contains a 'summary' or 'totals' object
-    if (order.summary && typeof order.summary === 'object') {
-      for (const k of ['total', 'grandTotal', 'amount']) {
-        if (k in order.summary) {
-          const val = parseNumber(order.summary[k]);
-          if (val) return val;
-        }
-      }
     }
 
     return 0;
   }
+
 
   const totalOrders = orders.length;
   const totalRevenue = orders.reduce((sum, o) => sum + computeRevenue(o), 0);
@@ -122,6 +83,10 @@ export default function StatsScreen() {
             <Text style={styles.cardLabel}>Tổng đơn hàng</Text>
             <Text style={styles.cardValue}>{totalOrders}</Text>
           </View>
+          <View style={styles.card}>
+            <Text style={styles.cardLabel}>Tổng sản phẩm đã bán</Text>
+            <Text style={styles.cardValue}>{totalItemsSold}</Text>
+          </View>
 
           <View style={styles.card}>
             <Text style={styles.cardLabel}>Tổng doanh thu</Text>
@@ -134,7 +99,7 @@ export default function StatsScreen() {
               <Text>Không có đơn hàng</Text>
             ) : (
               Object.entries(byStatus).map(([k, v]) => (
-                <View key={k} style={styles.statusRow}> 
+                <View key={k} style={styles.statusRow}>
                   <Text style={styles.statusKey}>{k}</Text>
                   <Text style={styles.statusVal}>{v}</Text>
                 </View>

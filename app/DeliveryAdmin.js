@@ -65,7 +65,26 @@ export default function DeliveryAdmin() {
           <Text>Người nhận: {order.address?.recipient}</Text>
           <Text>Điện thoại: {order.address?.phone}</Text>
           <Text>Địa chỉ: {order.address?.street}, {order.address?.district}, {order.address?.city}</Text>
-          <Text>Trạng thái: {order.status}</Text>
+          <Text style={{
+            color: order.status === 'delivered' ? 'green' :
+              order.status === 'shipped' ? '#f57c00' : '#999'
+          }}>
+            Trạng thái: {order.status}
+          </Text>
+
+          <Text style={{ marginTop: 6, fontWeight: 'bold' }}>Sản phẩm:</Text>
+          {Array.isArray(order.items) && order.items.length > 0 ? (
+            order.items.map((item, i) => (
+              <Text key={i} style={{ marginLeft: 8 }}>
+                - {item.name} x {item.quantity} @ {item.price} đ
+                {item.type === 'preorder' && <Text style={{ color: '#007aff' }}> (PreOrder)</Text>}
+              </Text>
+            ))
+          ) : (
+            <Text style={{ marginLeft: 8, fontStyle: 'italic' }}>Không có sản phẩm</Text>
+          )}
+          <Text style={{ marginTop: 6, fontWeight: 'bold' }}>Tổng tiền: {order.totalPrice?.toLocaleString()} đ</Text>
+
           <Text>Ngày tạo: {order.createdAt ? new Date(order.createdAt).toLocaleString() : ''}</Text>
           <Text style={{ fontWeight: 'bold', marginTop: 6 }}>Username người mua: {order.username || '(không có)'}</Text>
           <TouchableOpacity
@@ -74,7 +93,7 @@ export default function DeliveryAdmin() {
               try {
                 await fetch(`https://ctechlab-e.io.vn/deliveries/${order._id}`, { method: 'DELETE' });
                 fetchOrders();
-              } catch {}
+              } catch { }
             }}
           >
             <Text style={{ fontSize: 20, color: '#e53935', fontWeight: 'bold' }}>🗑️</Text>
