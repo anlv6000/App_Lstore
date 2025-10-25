@@ -22,6 +22,8 @@ export default function HomeGoc() {
   const [availableProducts, setAvailableProducts] = useState([]);
   const navigation = useNavigation();
   const { role, username } = useAuth();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
 
   const [showPreorderList, setShowPreorderList] = useState(false);
 
@@ -57,6 +59,20 @@ export default function HomeGoc() {
     } catch (err) {
       Alert.alert('Lỗi', 'Không thể mở bản đồ.');
     }
+  };
+  const handleSearch = (text) => {
+    setSearchQuery(text);
+
+    if (text.trim() === '') {
+      setSearchResults([]);
+      return;
+    }
+
+    const allProducts = [...preOrderProducts, ...availableProducts];
+    const filtered = allProducts.filter((item) =>
+      item.name?.toLowerCase().includes(text.toLowerCase())
+    );
+    setSearchResults(filtered);
   };
 
   const lat = 21.0315, lng = 105.7820;
@@ -107,8 +123,26 @@ export default function HomeGoc() {
           >
             <Image source={require('../assets/icon.png')} style={{ width: 32, height: 32 }} />
           </TouchableOpacity>
-        </View>
 
+        </View>
+        {role !== 'admin' && (
+          <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
+            <Pressable
+              style={({ pressed }) => [
+                {
+                  backgroundColor: pressed ? '#e0e0e0' : '#f2f2f2',
+                  borderRadius: 20,
+                  paddingVertical: 6,
+                  paddingHorizontal: 14,
+                  marginRight: 10,
+                },
+              ]}
+              onPress={() => navigation.navigate('DeliveryAdmin')}
+            >
+              <Text style={{ fontWeight: 'bold', color: '#1976d2' }}>Đơn hàng</Text>
+            </Pressable>
+          </View>
+        )}
         {/* Admin-only second row: Đơn hàng + Thống kê */}
         {role === 'admin' && (
           <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
@@ -149,7 +183,26 @@ export default function HomeGoc() {
           style={styles.searchBar}
           placeholder="Tìm kiếm sản phẩm..."
           placeholderTextColor="#999"
+          value={searchQuery}
+          onChangeText={handleSearch}
         />
+        {searchQuery.length > 0 && (
+          <View style={{ paddingHorizontal: 16, marginBottom: 12 }}>
+            <Text style={styles.sectionTitle}>Kết quả tìm kiếm</Text>
+            {searchResults.length > 0 ? (
+              <FlatList
+                data={searchResults}
+                keyExtractor={(item) => item._id}
+                renderItem={renderProduct}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+              />
+            ) : (
+              <Text style={{ color: '#999', fontStyle: 'italic' }}>Không tìm thấy sản phẩm phù hợp.</Text>
+            )}
+          </View>
+        )}
+
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.carousel}>
           <Image source={require('../assets/products/33tos1.jpg')} style={styles.carouselImage} />
           <Image source={require('../assets/products/33tos2.jpg')} style={styles.carouselImage} />
@@ -208,7 +261,7 @@ export default function HomeGoc() {
               <Text style={{ color: '#fff', fontWeight: 'bold' }}>Xem bản đồ</Text>
             </TouchableOpacity>
           </View>
-        
+
           <View style={styles.infoBlock}>
             <Text style={styles.infoTitle}>Kết nối với chúng tôi</Text>
             <Text>- YouTube | Facebook | Instagram | TikTok</Text>

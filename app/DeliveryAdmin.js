@@ -1,23 +1,34 @@
 import { useEffect, useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useAuth } from '../context/AuthContext';
+
 export default function DeliveryAdmin() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [newStatus, setNewStatus] = useState('pending');
+  const { role, username } = useAuth();
 
   const fetchOrders = async () => {
     setLoading(true);
     try {
       const res = await fetch('https://ctechlab-e.io.vn/deliveries');
       const data = await res.json();
-      setOrders(Array.isArray(data) ? data : []);
+      const allOrders = Array.isArray(data) ? data : [];
+
+      // Nếu là admin thì lấy tất cả, nếu không thì lọc theo username
+      const filteredOrders = role === 'admin'
+        ? allOrders
+        : allOrders.filter(order => order.username === username);
+
+      setOrders(filteredOrders);
     } catch {
       setOrders([]);
     }
     setLoading(false);
   };
+
 
   useEffect(() => {
     fetchOrders();
