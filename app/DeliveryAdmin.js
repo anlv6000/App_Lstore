@@ -283,6 +283,32 @@ export default function DeliveryAdmin() {
               </View>
             </View>
           </Modal>
+          {role !== 'admin' && order.status === 'shipped' && (
+            <TouchableOpacity
+              style={{
+                marginTop: 12,
+                backgroundColor: '#4caf50',
+                paddingVertical: 10,
+                paddingHorizontal: 14,
+                borderRadius: 6,
+                alignSelf: 'flex-start',
+              }}
+              onPress={async () => {
+                try {
+                  await fetch(`https://ctechlab-e.io.vn/deliveries/${order._id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: 'delivered' }),
+                  });
+                  fetchOrders();
+                } catch {
+                  Alert.alert('Lỗi', 'Không thể cập nhật trạng thái đơn hàng');
+                }
+              }}
+            >
+              <Text style={{ color: '#fff', fontWeight: 'bold' }}>Đã nhận hàng</Text>
+            </TouchableOpacity>
+          )}
 
 
         </View>

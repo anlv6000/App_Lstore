@@ -174,11 +174,23 @@ export default function HomeGoc() {
             >
               <Text style={{ fontWeight: 'bold', color: '#1976d2' }}>Thống kê</Text>
             </Pressable>
+            <Pressable
+              style={({ pressed }) => [
+                {
+                  backgroundColor: pressed ? '#e0e0e0' : '#f2f2f2',
+                  borderRadius: 20,
+                  paddingVertical: 6,
+                  paddingHorizontal: 14,
+                },
+              ]}
+              onPress={() => navigation.navigate('ProductAdmin')}
+            >
+              <Text style={{ fontWeight: 'bold', color: '#1976d2' }}>Quản lý sản phẩm</Text>
+            </Pressable>
           </View>
         )}
       </View>
       <ScrollView style={styles.container}>
-        {/* ...existing code... */}
         <TextInput
           style={styles.searchBar}
           placeholder="Tìm kiếm sản phẩm..."
