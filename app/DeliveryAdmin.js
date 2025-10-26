@@ -1,5 +1,6 @@
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { useEffect, useState } from 'react';
-import { Modal, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Modal, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useAuth } from '../context/AuthContext';
 
 export default function DeliveryAdmin() {
@@ -9,6 +10,16 @@ export default function DeliveryAdmin() {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [newStatus, setNewStatus] = useState('pending');
   const { role, username } = useAuth();
+  const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false);
+  const [orderToDelete, setOrderToDelete] = useState(null);
+  const [searchText, setSearchText] = useState('');
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [filterStartDate, setFilterStartDate] = useState(null);
+  const [filterEndDate, setFilterEndDate] = useState(null);
+
+  const [showStartPicker, setShowStartPicker] = useState(false);
+  const [showEndPicker, setShowEndPicker] = useState(false);
 
   const fetchOrders = async () => {
     setLoading(true);
@@ -17,17 +28,36 @@ export default function DeliveryAdmin() {
       const data = await res.json();
       const allOrders = Array.isArray(data) ? data : [];
 
-      // Nếu là admin thì lấy tất cả, nếu không thì lọc theo username
-      const filteredOrders = role === 'admin'
+      let filtered = role === 'admin'
         ? allOrders
         : allOrders.filter(order => order.username === username);
 
-      setOrders(filteredOrders);
+      // Lọc theo username người mua
+      if (searchText.trim()) {
+        const keyword = searchText.trim().toLowerCase();
+        filtered = filtered.filter(order =>
+          order.username?.toLowerCase().includes(keyword)
+        );
+      }
+
+      // Lọc theo khoảng ngày
+      if (filterStartDate || filterEndDate) {
+        filtered = filtered.filter(order => {
+          const created = new Date(order.createdAt);
+          if (filterStartDate && created < new Date(filterStartDate.setHours(0, 0, 0, 0))) return false;
+          if (filterEndDate && created > new Date(filterEndDate.setHours(23, 59, 59, 999))) return false;
+          return true;
+        });
+      }
+
+
+      setOrders(filtered);
     } catch {
       setOrders([]);
     }
     setLoading(false);
   };
+
 
 
   useEffect(() => {
@@ -65,13 +95,121 @@ export default function DeliveryAdmin() {
       {orders.length === 0 && !loading ? (
         <Text style={{ marginTop: 20 }}>Không có đơn hàng nào.</Text>
       ) : null}
+      {role === 'admin' && (
+        <View style={{ marginBottom: 16 }}>
+          {/* Tìm kiếm theo tên người nhận */}
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
+            <TextInput
+              value={searchText}
+              onChangeText={setSearchText}
+              placeholder="Tên người nhận..."
+              style={{
+                flex: 1,
+                borderWidth: 1,
+                borderColor: '#ccc',
+                borderRadius: 6,
+                padding: 8,
+                marginRight: 8,
+              }}
+            />
+            <TouchableOpacity
+              onPress={fetchOrders}
+              style={{
+                backgroundColor: '#1976d2',
+                paddingVertical: 10,
+                paddingHorizontal: 14,
+                borderRadius: 6,
+              }}
+            >
+              <Text style={{ color: '#fff', fontWeight: 'bold' }}>Tìm</Text>
+            </TouchableOpacity>
+          </View>
+          {/* Lọc theo ngày tạo */}
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <TouchableOpacity
+              onPress={() => setShowStartPicker(true)}
+              style={{
+                flex: 1,
+                borderWidth: 1,
+                borderColor: '#ccc',
+                borderRadius: 6,
+                padding: 10,
+                marginRight: 8,
+              }}
+            >
+              <Text>{startDate.toISOString().slice(0, 10)}</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => setShowEndPicker(true)}
+              style={{
+                flex: 1,
+                borderWidth: 1,
+                borderColor: '#ccc',
+                borderRadius: 6,
+                padding: 10,
+                marginRight: 8,
+              }}
+            >
+              <Text>{endDate.toISOString().slice(0, 10)}</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => {
+                setFilterStartDate(startDate);
+                setFilterEndDate(endDate);
+                fetchOrders();
+              }}
+              style={{
+                backgroundColor: '#1976d2',
+                paddingVertical: 10,
+                paddingHorizontal: 14,
+                borderRadius: 6,
+              }}
+            >
+              <Text style={{ color: '#fff', fontWeight: 'bold' }}>Lọc</Text>
+            </TouchableOpacity>
+
+          </View>
+
+          {showStartPicker && (
+            <DateTimePicker
+              value={startDate}
+              mode="date"
+              display="default"
+              onChange={(event, selectedDate) => {
+                setShowStartPicker(Platform.OS === 'ios');
+                if (selectedDate) setStartDate(selectedDate);
+              }}
+            />
+          )}
+
+          {showEndPicker && (
+            <DateTimePicker
+              value={endDate}
+              mode="date"
+              display="default"
+              onChange={(event, selectedDate) => {
+                setShowEndPicker(Platform.OS === 'ios');
+                if (selectedDate) setEndDate(selectedDate);
+              }}
+            />
+          )}
+
+        </View>
+      )}
+
+
       {orders.map((order, idx) => (
         <View key={order._id || idx} style={styles.orderBox}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             <Text style={styles.orderId}>Mã đơn: {order._id}</Text>
-            <TouchableOpacity onPress={() => openModal(order)} style={styles.plusBtn}>
-              <Text style={{ fontSize: 22, color: '#1976d2', fontWeight: 'bold' }}>+</Text>
-            </TouchableOpacity>
+            {role === 'admin' && (
+              <TouchableOpacity onPress={() => openModal(order)} style={styles.plusBtn}>
+                <Text style={{ fontSize: 22, color: '#1976d2', fontWeight: 'bold' }}>+</Text>
+              </TouchableOpacity>
+            )}
+
           </View>
           <Text>Người nhận: {order.address?.recipient}</Text>
           <Text>Điện thoại: {order.address?.phone}</Text>
@@ -98,17 +236,55 @@ export default function DeliveryAdmin() {
 
           <Text>Ngày tạo: {order.createdAt ? new Date(order.createdAt).toLocaleString() : ''}</Text>
           <Text style={{ fontWeight: 'bold', marginTop: 6 }}>Username người mua: {order.username || '(không có)'}</Text>
-          <TouchableOpacity
-            style={styles.trashBtn}
-            onPress={async () => {
-              try {
-                await fetch(`https://ctechlab-e.io.vn/deliveries/${order._id}`, { method: 'DELETE' });
-                fetchOrders();
-              } catch { }
-            }}
+          {role === 'admin' && (
+            <TouchableOpacity
+              style={styles.trashBtn}
+              onPress={() => {
+                setOrderToDelete(order);
+                setConfirmDeleteVisible(true);
+              }}
+            >
+              <Text style={{ fontSize: 20, color: '#e53935', fontWeight: 'bold' }}>🗑️</Text>
+            </TouchableOpacity>
+          )}
+
+          {/* Modal xác nhận xóa đơn hàng */}
+
+          <Modal
+            visible={confirmDeleteVisible}
+            transparent
+            animationType="fade"
+            onRequestClose={() => setConfirmDeleteVisible(false)}
           >
-            <Text style={{ fontSize: 20, color: '#e53935', fontWeight: 'bold' }}>🗑️</Text>
-          </TouchableOpacity>
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContent}>
+                <Text style={{ fontWeight: 'bold', fontSize: 18, marginBottom: 12 }}>Xác nhận xóa đơn hàng</Text>
+                <Text>Bạn có chắc muốn xóa đơn hàng này không?</Text>
+                <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 16 }}>
+                  <Pressable onPress={() => setConfirmDeleteVisible(false)} style={{ marginRight: 16 }}>
+                    <Text style={{ color: '#888', fontWeight: 'bold' }}>Hủy</Text>
+                  </Pressable>
+                  <Pressable
+                    onPress={async () => {
+                      try {
+                        await fetch(`https://ctechlab-e.io.vn/deliveries/${orderToDelete._id}`, { method: 'DELETE' });
+                        setConfirmDeleteVisible(false);
+                        setOrderToDelete(null);
+                        fetchOrders();
+                      } catch {
+                        setConfirmDeleteVisible(false);
+                        setOrderToDelete(null);
+                      }
+                    }}
+                  >
+                    <Text style={{ color: '#e53935', fontWeight: 'bold' }}>Xóa</Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </Modal>
+
+
         </View>
       ))}
 
