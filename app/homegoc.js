@@ -153,7 +153,6 @@ export default function HomeGoc() {
                   borderRadius: 20,
                   paddingVertical: 6,
                   paddingHorizontal: 14,
-                  marginRight: 10,
                 },
               ]}
               onPress={() => navigation.navigate('DeliveryAdmin')}
@@ -185,8 +184,22 @@ export default function HomeGoc() {
               ]}
               onPress={() => navigation.navigate('ProductAdmin')}
             >
-              <Text style={{ fontWeight: 'bold', color: '#1976d2' }}>Quản lý sản phẩm</Text>
+              <Text style={{ fontWeight: 'bold', color: '#1976d2' }}>Sản phẩm</Text>
             </Pressable>
+            <Pressable
+              style={({ pressed }) => [
+                {
+                  backgroundColor: pressed ? '#e0e0e0' : '#f2f2f2',
+                  borderRadius: 20,
+                  paddingVertical: 6,
+                  paddingHorizontal: 14,
+                },
+              ]}
+              onPress={() => navigation.navigate('UserAdmin')}
+            >
+              <Text style={{ fontWeight: 'bold', color: '#1976d2' }}>Người dùng</Text>
+            </Pressable>
+
           </View>
         )}
       </View>
@@ -276,7 +289,24 @@ export default function HomeGoc() {
 
           <View style={styles.infoBlock}>
             <Text style={styles.infoTitle}>Kết nối với chúng tôi</Text>
-            <Text>- YouTube | Facebook | Instagram | TikTok</Text>
+            <Text>
+              -{' '}
+              <Text style={{ color: '#1976d2' }} onPress={() => Linking.openURL('https://www.youtube.com/@LtStoreVN/shorts')}>
+                YouTube
+              </Text>{' '}
+              |{' '}
+              <Text style={{ color: '#1976d2' }} onPress={() => Linking.openURL('https://www.facebook.com/LTSTORE24')}>
+                Facebook
+              </Text>{' '}
+              |{' '}
+              <Text style={{ color: '#1976d2' }} onPress={() => Linking.openURL('https://ltstorehobby.com')}>
+                Website
+              </Text>{' '}
+              |{' '}
+              <Text style={{ color: '#1976d2' }} onPress={() => Linking.openURL('https://www.tiktok.com/@ltstore691')}>
+                TikTok
+              </Text>
+            </Text>
             <Text>- Thanh toán: MoMo, chuyển khoản</Text>
           </View>
         </View>
