@@ -68,7 +68,22 @@ export default function Checkout() {
         }),
       });
       setLoading(false);
-      router.push('/QRPayment');
+      router.push({
+        pathname: '/QRPayment',
+        params: {
+          address: JSON.stringify({
+            recipient: name,
+            phone,
+            street,
+            city,
+            district
+          }),
+          items: JSON.stringify(items),
+          userId,
+          username
+        }
+      });
+
     } catch (error) {
       setLoading(false);
       Alert.alert('Lỗi', 'Không thể gửi đơn hàng.');
